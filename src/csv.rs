@@ -36,15 +36,25 @@ pub fn parse_csv(file_path: &str) -> Result<(), Box<dyn Error>> {
         let query_row: StringRecord = row?;
 
         let date_time: String = match query_row.get(1) {
-            Some(datetime) => datetime.trim().to_string(),
+            Some(datetime) => {
+                // run datetime parser here if needed
+                datetime.trim().to_string()
+            }
             None => String::from(""),
         };
         let keyword: String = match query_row.get(2) {
-            Some(keyword) => keyword.trim().to_string(),
+            Some(keyword) => {
+                // run keyword parser here if needed
+                keyword.trim().to_string()
+            }
             None => String::from(""),
         };
         let source: String = match query_row.get(3) {
-            Some(source) => source.trim().to_string(),
+            Some(source) => {
+                // run source parser here if needed
+                // + url decoder
+                source.trim().to_string()
+            }
             None => String::from(""),
         };
         let hits: String = match query_row.get(4) {
@@ -52,7 +62,11 @@ pub fn parse_csv(file_path: &str) -> Result<(), Box<dyn Error>> {
             None => String::from(""),
         };
         let target: String = match query_row.get(8) {
-            Some(target) => target.trim().to_string(),
+            Some(target) => {
+                // run target parser here if needed
+                // + url decoder
+                target.trim().to_string()
+            }
             None => String::from(""),
         };
 

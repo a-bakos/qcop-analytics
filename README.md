@@ -10,13 +10,15 @@
     - string cutoff at length X
     - exclude logged in user searches ?
     - decode urls
+    - "+" character in "keyword" translates to whitespace
 - produce fresh datasheet
 
 ## initial objectives
     - find most searched for keywords
 
 ## what did i learn
-    - ?
+    - many don't know how to search for things
+    - many can't type
 
 ## technical ideas
     - find csv parser crate
