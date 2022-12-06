@@ -10,12 +10,13 @@
     - string cutoff at length X
     - exclude logged in user searches ?
     - decode urls
+- produce fresh datasheet
 
 ## initial objectives
-    - find most search for keywords
+    - find most searched for keywords
 
 ## what did i learn
-    - most people can't type
+    - ?
 
 ## technical ideas
     - find csv parser crate
