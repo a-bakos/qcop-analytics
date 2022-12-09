@@ -1,20 +1,32 @@
 extern crate csv;
 
 use csv::{Reader, StringRecord};
-use std::error::Error;
+use std::{collections::HashMap, error::Error};
 //use urlencoding::decode;
 
 #[derive(Debug)]
-struct CleanRecord {
-    date_time: String,
-    keyword: String,
-    source: String,
-    hits: String,
-    target: String,
+pub struct RecordCollection {
+    pub map: HashMap<String, CleanRecord>,
+}
+
+impl RecordCollection {
+    pub fn add(&mut self, record: CleanRecord) {
+        let keyword: String = record.keyword.clone();
+        self.map.insert(keyword, record);
+    }
+}
+
+#[derive(Debug)]
+pub struct CleanRecord {
+    pub date_time: String,
+    pub keyword: String,
+    pub source: String,
+    pub hits: String,
+    pub target: String,
 }
 
 impl CleanRecord {
-    fn new(
+    pub fn new(
         date_time: String,
         keyword: String,
         source: String,
@@ -31,7 +43,7 @@ impl CleanRecord {
     }
 }
 
-pub fn parse_csv(file_path: &str) -> Result<(), Box<dyn Error>> {
+pub fn parse_csv(file_path: &str, collection: &mut RecordCollection) -> Result<(), Box<dyn Error>> {
     let mut reader = Reader::from_path(file_path)?;
     for row in reader.records() {
         let query_row: StringRecord = row?;
@@ -72,6 +84,7 @@ pub fn parse_csv(file_path: &str) -> Result<(), Box<dyn Error>> {
 
         let clean_record = CleanRecord::new(date_time, keyword, source, hits, target);
         println!("{:#?}", clean_record);
+        collection.add(clean_record);
     }
     Ok(())
 }
