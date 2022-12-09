@@ -100,7 +100,7 @@ pub fn parse_csv(file_path: &str, collection: &mut RecordCollection) -> Result<(
         };
 
         let clean_record = CleanRecord::new(date_time, keyword, source, hits, target);
-        println!("{:#?}", clean_record);
+        //println!("{:#?}", clean_record);
         collection.add(clean_record);
     }
     Ok(())
