@@ -2,6 +2,7 @@ extern crate csv;
 
 use csv::{Reader, StringRecord};
 use std::error::Error;
+//use urlencoding::decode;
 
 #[derive(Debug)]
 struct CleanRecord {
@@ -51,9 +52,8 @@ pub fn parse_csv(file_path: &str) -> Result<(), Box<dyn Error>> {
         };
         let source: String = match query_row.get(3) {
             Some(source) => {
-                // run source parser here if needed
-                // + url decoder
-                source.trim().to_string()
+                // url decoder
+                urlencoding::decode(source.trim()).unwrap().into_owned()
             }
             None => String::from(""),
         };
