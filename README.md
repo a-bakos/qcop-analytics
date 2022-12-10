@@ -5,15 +5,15 @@
 - keyword search
     - pull up statistics for a selected keyword
 - data cleaning
-    - exclude data points / columns
+    - [done] exclude data points / columns
     - get rid of bot searches, hacking attempts
         - sql-like commands
         - {search_term_string}
-    - string cutoff at length X
-    - exclude logged in user searches
-    - decode urls
+    - [done] string cutoff at length X
+    - [done] exclude logged in user searches
+    - [done] decode urls
     - "+" character in "keyword" translates to whitespace
-- produce fresh datasheet
+- produce fresh datasheet for cleaned data
 
 ## initial objectives
     - find most searched for keywords
@@ -21,9 +21,6 @@
 ## what did i learn
     - many don't know how to search for things
     - many can't type
-
-## technical ideas
-    - find csv parser crate
 
 A query has the following fields stored in a CSV row:
 
