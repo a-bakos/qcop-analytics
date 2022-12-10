@@ -6,6 +6,12 @@ pub struct RecordCollection {
 }
 
 impl RecordCollection {
+    pub fn new() -> Self {
+        Self {
+            map: HashMap::new(),
+        }
+    }
+
     pub fn add(&mut self, record: CleanRecord) {
         let keyword: String = record.keyword.clone();
         if self.map.get(&keyword).is_none() {
