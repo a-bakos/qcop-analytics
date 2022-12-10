@@ -22,7 +22,12 @@ pub fn target_url(url: &str) -> String {
 }
 
 pub fn keyword(keyword: &str) -> String {
-    keyword.trim().to_string()
+    let mut processed_kw = keyword.trim().to_string();
+
+    // Find "+" in kw and replace it with whitespace
+    processed_kw = processed_kw.replace("+", " ");
+
+    processed_kw
 }
 
 pub fn datetime(datetime: &str) -> String {
