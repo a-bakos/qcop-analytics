@@ -28,7 +28,14 @@ pub fn parse_csv(
                 if !data_processor::is_valid_length(keyword) {
                     continue;
                 }
-                data_processor::keyword(keyword)
+
+                let processed_kw = data_processor::keyword(keyword);
+
+                // Skip, if keyword is invalid
+                if processed_kw == consts::KEYWORD_INVALID {
+                    continue;
+                }
+                processed_kw
             }
             None => data_processor::default(),
         };

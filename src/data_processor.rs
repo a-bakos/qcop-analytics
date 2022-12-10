@@ -27,6 +27,10 @@ pub fn keyword(keyword: &str) -> String {
     // Find "+" in kw and replace it with whitespace
     processed_kw = processed_kw.replace("+", " ");
 
+    if filter_invalid(keyword) {
+        processed_kw = consts::KEYWORD_INVALID.to_string();
+    }
+
     processed_kw
 }
 
@@ -36,4 +40,13 @@ pub fn datetime(datetime: &str) -> String {
 
 pub fn is_valid_length(keyword: &str) -> bool {
     keyword.len() >= consts::KEYWORD_MIN_LENGTH && keyword.len() <= consts::KEYWORD_MAX_LENGTH
+}
+
+fn filter_invalid(keyword: &str) -> bool {
+    for invalid_kw in consts::INVALID_KEYWORD_LIST.into_iter() {
+        if invalid_kw == keyword {
+            return true;
+        }
+    }
+    return false;
 }
