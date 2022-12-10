@@ -13,9 +13,11 @@ pub fn parse_csv(
     for row in reader.records() {
         let query_row: StringRecord = row?;
 
+        // Process keyword first (bounds check)
         let keyword: String = match query_row.get(2) {
             Some(keyword) => {
-                if !data_processor::is_valid_length(&keyword) {
+                // Skip, if length not valid
+                if !data_processor::is_valid_length(keyword) {
                     continue;
                 }
                 data_processor::keyword(keyword)
@@ -57,7 +59,7 @@ pub fn write_to_csv(
     for (key, val) in collection.iter() {
         let keyword = key;
         let count = val.0.to_string();
-        wtr.write_record(&[keyword, count.as_str()])?;
+        wtr.write_record([keyword, count.as_str()])?;
     }
 
     wtr.flush()?;

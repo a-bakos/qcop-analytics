@@ -20,7 +20,7 @@ impl RecordCollection {
         } else {
             let values = self.map.get_mut(&keyword).unwrap();
             values.1.add_to_list(record);
-            values.0 = values.0 + 1;
+            values.0 += 1;
         }
     }
 }
