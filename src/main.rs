@@ -1,10 +1,12 @@
 mod csv;
+mod data_processor;
+mod records;
 mod search_query;
 
 use std::collections::HashMap;
 
-use crate::csv::{parse_csv, write_to_csv, RecordCollection};
-use search_query::*;
+use crate::csv::{parse_csv, write_to_csv};
+use crate::records::RecordCollection;
 
 const CSV_INPUT_FILE_NAME: &'static str = "export/er-wp_q_cop.csv"; //"export/as-wp_q_cop.csv";
 const CSV_OUTPUT_FILE_NAME: &'static str = "outtest.csv";
