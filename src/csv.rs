@@ -1,6 +1,6 @@
 extern crate csv;
 
-use csv::{Reader, StringRecord, Writer};
+use csv::{Reader, StringRecord, WriterBuilder};
 use std::{collections::HashMap, error::Error};
 //use urlencoding::decode;
 
@@ -80,10 +80,7 @@ pub fn parse_csv(file_path: &str, collection: &mut RecordCollection) -> Result<(
             None => String::from(""),
         };
         let source: String = match query_row.get(3) {
-            Some(source) => {
-                // url decoder
-                urlencoding::decode(source.trim()).unwrap().into_owned()
-            }
+            Some(source) => get_decoded_url(source),
             None => String::from(""),
         };
         let hits: String = match query_row.get(4) {
@@ -107,7 +104,7 @@ pub fn parse_csv(file_path: &str, collection: &mut RecordCollection) -> Result<(
 }
 
 pub fn write_to_csv(file_path: &str, collection: RecordCollection) -> Result<(), Box<dyn Error>> {
-    let mut wtr = Writer::from_path(file_path)?;
+    let mut wtr = WriterBuilder::new().from_path(file_path)?;
 
     let collection = collection.map;
 
@@ -120,4 +117,8 @@ pub fn write_to_csv(file_path: &str, collection: RecordCollection) -> Result<(),
     wtr.flush()?;
 
     Ok(())
+}
+
+fn get_decoded_url(url: &str) -> String {
+    urlencoding::decode(url.trim()).unwrap().into_owned()
 }
