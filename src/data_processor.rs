@@ -28,6 +28,7 @@ pub fn keyword(keyword: &str) -> String {
     processed_kw = processed_kw.replace('+', " ");
 
     if filter_invalid(keyword) {
+        maybe_store_invalid_keyword(keyword);
         processed_kw = consts::KEYWORD_INVALID.to_string();
     }
 
@@ -49,4 +50,11 @@ fn filter_invalid(keyword: &str) -> bool {
         }
     }
     false
+}
+
+// TODO!
+fn maybe_store_invalid_keyword(keyword: &str) {
+    if consts::STORE_INVALID_ITEMS {
+        //we need a global storage for invalid keywords and we'll consume the parameter
+    }
 }
