@@ -7,8 +7,10 @@
 - data cleaning
     - exclude data points / columns
     - get rid of bot searches, hacking attempts
+        - sql-like commands
+        - {search_term_string}
     - string cutoff at length X
-    - exclude logged in user searches ?
+    - exclude logged in user searches
     - decode urls
     - "+" character in "keyword" translates to whitespace
 - produce fresh datasheet

@@ -1,5 +1,6 @@
 extern crate csv;
 
+use crate::consts;
 use crate::data_processor;
 use crate::records;
 use csv::{Reader, StringRecord, WriterBuilder};
@@ -13,7 +14,14 @@ pub fn parse_csv(
     for row in reader.records() {
         let query_row: StringRecord = row?;
 
-        // Process keyword first (bounds check)
+        // Check if we need to skip known-user searches
+        if let Some(user) = query_row.get(5) {
+            if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES && !user.is_empty() {
+                continue;
+            }
+        };
+
+        // Check keyword length validity (bounds check)
         let keyword: String = match query_row.get(2) {
             Some(keyword) => {
                 // Skip, if length not valid
