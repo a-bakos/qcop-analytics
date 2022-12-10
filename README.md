@@ -12,7 +12,7 @@
     - [done] string cutoff at length X
     - [done] exclude logged in user searches
     - [done] decode urls
-    - "+" character in "keyword" translates to whitespace
+    - [done] "+" character in "keyword" translates to whitespace
 - produce fresh datasheet for cleaned data
 
 ## initial objectives
