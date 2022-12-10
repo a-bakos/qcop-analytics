@@ -25,7 +25,7 @@ pub fn keyword(keyword: &str) -> String {
     let mut processed_kw = keyword.trim().to_string();
 
     // Find "+" in kw and replace it with whitespace
-    processed_kw = processed_kw.replace("+", " ");
+    processed_kw = processed_kw.replace('+', " ");
 
     if filter_invalid(keyword) {
         processed_kw = consts::KEYWORD_INVALID.to_string();
@@ -48,5 +48,5 @@ fn filter_invalid(keyword: &str) -> bool {
             return true;
         }
     }
-    return false;
+    false
 }
