@@ -27,9 +27,15 @@ pub fn keyword(keyword: &str) -> String {
     // Find "+" in kw and replace it with whitespace
     processed_kw = processed_kw.replace('+', " ");
 
-    if filter_invalid(keyword) {
+    if filter_known_invalid(keyword) {
         maybe_store_invalid_keyword(keyword);
         processed_kw = consts::KEYWORD_INVALID.to_string();
+        return processed_kw;
+    }
+    if filter_unknown_invalid(keyword) {
+        maybe_store_invalid_keyword(keyword);
+        processed_kw = consts::KEYWORD_INVALID.to_string();
+        return processed_kw;
     }
 
     processed_kw
@@ -43,10 +49,24 @@ pub fn is_valid_length(keyword: &str) -> bool {
     keyword.len() >= consts::KEYWORD_MIN_LENGTH && keyword.len() <= consts::KEYWORD_MAX_LENGTH
 }
 
-fn filter_invalid(keyword: &str) -> bool {
+// To filter known, invalid keywords
+fn filter_known_invalid(keyword: &str) -> bool {
     for invalid_kw in consts::INVALID_KEYWORD_LIST.into_iter() {
-        if invalid_kw == keyword {
+        if invalid_kw.to_lowercase() == keyword.to_lowercase() {
             return true;
+        }
+    }
+    false
+}
+
+// To filter unknown, invalid "terms" such as SQL commands and any other non-sense attempts
+fn filter_unknown_invalid(keyword: &str) -> bool {
+    for tainted_kw in consts::TAINTED_SEARCHES.into_iter() {
+        // FIX needed: doesn't iterate ??!
+        println!("{}", tainted_kw);
+        match keyword.to_lowercase().find(tainted_kw) {
+            Some(_) => return true,
+            None => return false,
         }
     }
     false

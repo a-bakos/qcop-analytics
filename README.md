@@ -8,7 +8,7 @@
     - [done] exclude data points / columns
     - get rid of bot searches, hacking attempts
         - sql-like commands
-        - {search_term_string}
+        - [done] {search_term_string}
     - [done] string cutoff at length X
     - [done] exclude logged in user searches
     - [done] decode urls
@@ -33,3 +33,13 @@ A query has the following fields stored in a CSV row:
 We only need 5 of them:
 
 `"time","query","url","hits","target"`
+
+#### Things to ignore
+
+- /Core/File/uploadPictureBase64.html
+- metrics/feed/rss2/Leisure/gtm.start/gtm.start
+- /index/\\think\\app/invokefunction
+- Home/\\think\\app/invokefunction
+- http://
+- xmlrpc.php
+- wp-admin/install.php
