@@ -13,12 +13,18 @@ pub fn parse_csv(
     for row in reader.records() {
         let query_row: StringRecord = row?;
 
-        let date_time: String = match query_row.get(1) {
-            Some(datetime) => data_processor::datetime(datetime),
+        let keyword: String = match query_row.get(2) {
+            Some(keyword) => {
+                if !data_processor::is_valid_length(&keyword) {
+                    continue;
+                }
+                data_processor::keyword(keyword)
+            }
             None => data_processor::default(),
         };
-        let keyword: String = match query_row.get(2) {
-            Some(keyword) => data_processor::keyword(keyword),
+
+        let date_time: String = match query_row.get(1) {
+            Some(datetime) => data_processor::datetime(datetime),
             None => data_processor::default(),
         };
         let source: String = match query_row.get(3) {

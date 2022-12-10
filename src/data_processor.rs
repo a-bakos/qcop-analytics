@@ -1,3 +1,5 @@
+use crate::consts;
+
 pub fn default() -> String {
     String::from("")
 }
@@ -25,4 +27,8 @@ pub fn keyword(keyword: &str) -> String {
 
 pub fn datetime(datetime: &str) -> String {
     datetime.trim().to_string()
+}
+
+pub fn is_valid_length(keyword: &str) -> bool {
+    keyword.len() >= consts::KEYWORD_MIN_LENGTH && keyword.len() <= consts::KEYWORD_MAX_LENGTH
 }
