@@ -1,6 +1,6 @@
 extern crate csv;
 
-use csv::{Reader, StringRecord};
+use csv::{Reader, StringRecord, Writer};
 use std::{collections::HashMap, error::Error};
 //use urlencoding::decode;
 
@@ -103,5 +103,21 @@ pub fn parse_csv(file_path: &str, collection: &mut RecordCollection) -> Result<(
         //println!("{:#?}", clean_record);
         collection.add(clean_record);
     }
+    Ok(())
+}
+
+pub fn write_to_csv(file_path: &str, collection: RecordCollection) -> Result<(), Box<dyn Error>> {
+    let mut wtr = Writer::from_path(file_path)?;
+
+    let collection = collection.map;
+
+    for (key, val) in collection.iter() {
+        let keyword = key;
+        let count = val.0.to_string();
+        wtr.write_record(&[keyword, count.as_str()])?;
+    }
+
+    wtr.flush()?;
+
     Ok(())
 }
