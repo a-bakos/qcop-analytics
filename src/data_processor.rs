@@ -62,15 +62,17 @@ fn filter_known_invalid(keyword: &str) -> bool {
 
 // To filter unknown, invalid "terms" such as SQL commands and any other non-sense attempts
 fn filter_unknown_invalid(keyword: &str) -> bool {
+    let mut match_found = false;
     for tainted_kw in consts::TAINTED_SEARCHES.into_iter() {
-        // FIX needed: doesn't iterate ??!
-        println!("{}", tainted_kw);
         match keyword.to_lowercase().find(tainted_kw) {
-            Some(_) => return true,
-            None => return false,
+            Some(_) => {
+                match_found = true;
+                break;
+            }
+            None => (),
         }
     }
-    false
+    match_found
 }
 
 // TODO!
