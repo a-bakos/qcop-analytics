@@ -10,6 +10,7 @@ pub fn parse_csv(
     file_path: &str,
     collection: &mut records::RecordCollection,
 ) -> Result<(), Box<dyn Error>> {
+    println!("Parsing CSV...");
     let mut reader = Reader::from_path(file_path)?;
     for row in reader.records() {
         let query_row: StringRecord = row?;
@@ -60,6 +61,7 @@ pub fn parse_csv(
         let clean_record = records::CleanRecord::new(date_time, keyword, source, hits, target);
         collection.add(clean_record);
     }
+    println!("Parsing finished.");
     Ok(())
 }
 
@@ -67,6 +69,7 @@ pub fn write_to_csv(
     file_path: &str,
     collection: records::RecordCollection,
 ) -> Result<(), Box<dyn Error>> {
+    println!("Writing results into CSV...");
     let mut wtr = WriterBuilder::new().from_path(file_path)?;
 
     let collection = collection.map;
