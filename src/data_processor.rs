@@ -12,9 +12,10 @@ fn get_decoded_url(url: &str) -> String {
     urlencoding::decode(url.trim()).unwrap().into_owned()
 }
 
-pub fn hits(hits: &str) -> String {
-    // todo - return u32 instead?
-    hits.trim().to_string()
+pub fn hits(hits: &str) -> i32 {
+    hits.trim()
+        .parse::<i32>()
+        .unwrap_or(consts::DEFAULT_MISSING_HITS)
 }
 
 pub fn target_url(url: &str) -> String {
@@ -29,12 +30,12 @@ pub fn keyword(keyword: &str) -> String {
 
     if filter_known_invalid(keyword) {
         maybe_store_invalid_keyword(keyword);
-        processed_kw = consts::KEYWORD_INVALID.to_string();
+        processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
     if filter_unknown_invalid(keyword) {
         maybe_store_invalid_keyword(keyword);
-        processed_kw = consts::KEYWORD_INVALID.to_string();
+        processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
 

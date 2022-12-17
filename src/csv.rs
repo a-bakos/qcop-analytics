@@ -33,7 +33,7 @@ pub fn parse_csv(
                 let processed_kw = data_processor::keyword(keyword);
 
                 // Skip, if keyword is invalid
-                if processed_kw == consts::KEYWORD_INVALID {
+                if processed_kw == consts::DEFAULT_KEYWORD_INVALID {
                     continue;
                 }
                 processed_kw
@@ -49,9 +49,9 @@ pub fn parse_csv(
             Some(source) => data_processor::source_url(source),
             None => data_processor::default(),
         };
-        let hits: String = match query_row.get(4) {
+        let hits: i32 = match query_row.get(4) {
             Some(hits) => data_processor::hits(hits),
-            None => data_processor::default(),
+            None => consts::DEFAULT_MISSING_HITS,
         };
         let target: String = match query_row.get(8) {
             Some(target) => data_processor::target_url(target),

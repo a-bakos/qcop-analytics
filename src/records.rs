@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct RecordCollection {
+    /// map meaning: [keyword, (count, metadata)]
     pub map: HashMap<String, (u32, CleanRecordContainer)>,
 }
 
@@ -41,7 +42,7 @@ pub struct CleanRecord {
     pub date_time: String,
     pub keyword: String,
     pub source: String,
-    pub hits: String,
+    pub hits: i32,
     pub target: String,
 }
 
@@ -50,7 +51,7 @@ impl CleanRecord {
         date_time: String,
         keyword: String,
         source: String,
-        hits: String,
+        hits: i32,
         target: String,
     ) -> Self {
         Self {
