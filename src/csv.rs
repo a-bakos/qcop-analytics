@@ -12,12 +12,14 @@ pub fn parse_csv(
 ) -> Result<(), Box<dyn Error>> {
     println!("Parsing CSV...");
     let mut reader = Reader::from_path(file_path)?;
+    let mut skipped_items: u32 = 0;
     for row in reader.records() {
         let query_row: StringRecord = row?;
 
         // Check if we need to skip known-user searches
         if let Some(user) = query_row.get(5) {
             if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES && !user.is_empty() {
+                skipped_items += 1;
                 continue;
             }
         };
@@ -27,6 +29,7 @@ pub fn parse_csv(
             Some(keyword) => {
                 // Skip, if length not valid
                 if !data_processor::is_valid_length(keyword) {
+                    skipped_items += 1;
                     continue;
                 }
 
@@ -34,6 +37,7 @@ pub fn parse_csv(
 
                 // Skip, if keyword is invalid
                 if processed_kw == consts::DEFAULT_KEYWORD_INVALID {
+                    skipped_items += 1;
                     continue;
                 }
                 processed_kw
@@ -62,6 +66,7 @@ pub fn parse_csv(
         collection.add(clean_record);
     }
     println!("Parsing finished.");
+    println!("Skipped items: {:?}", skipped_items);
     Ok(())
 }
 
