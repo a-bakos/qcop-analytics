@@ -40,7 +40,7 @@ pub fn keyword(keyword: &str) -> String {
         return processed_kw;
     }
 
-    if true == multi_filter_fail(keyword) {
+    if true == multi_filter(keyword) {
         processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
@@ -48,7 +48,7 @@ pub fn keyword(keyword: &str) -> String {
     processed_kw
 }
 
-fn multi_filter_fail(keyword: &str) -> bool {
+fn multi_filter(keyword: &str) -> bool {
     let re = Regex::new(r"(?i)\b(and|like|or)\b.*\b(and|like|or)\b.*\b(and|like|or)\b").unwrap();
     if true == re.is_match(keyword) {
         println!("FOUND IT in here!: {:#?}", keyword);
@@ -56,7 +56,7 @@ fn multi_filter_fail(keyword: &str) -> bool {
             if cap[1].to_lowercase() == cap[2].to_lowercase()
                 && cap[2].to_lowercase() == cap[3].to_lowercase()
             {
-                // All the same
+                // All the same, might not be invalid
                 return false;
             }
         }
