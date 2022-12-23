@@ -1,4 +1,5 @@
 use crate::consts;
+use regex::Regex;
 
 pub fn default() -> String {
     String::from("")
@@ -39,7 +40,29 @@ pub fn keyword(keyword: &str) -> String {
         return processed_kw;
     }
 
+    if true == multi_filter_fail(keyword) {
+        processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
+        return processed_kw;
+    }
+
     processed_kw
+}
+
+fn multi_filter_fail(keyword: &str) -> bool {
+    let re = Regex::new(r"(?i)\b(and|like|or)\b.*\b(and|like|or)\b.*\b(and|like|or)\b").unwrap();
+    if true == re.is_match(keyword) {
+        println!("FOUND IT in here!: {:#?}", keyword);
+        for cap in re.captures_iter(keyword) {
+            if cap[1].to_lowercase() == cap[2].to_lowercase()
+                && cap[2].to_lowercase() == cap[3].to_lowercase()
+            {
+                // All the same
+                return false;
+            }
+        }
+        return true;
+    }
+    false
 }
 
 pub fn datetime(datetime: &str) -> String {
