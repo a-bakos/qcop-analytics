@@ -21,6 +21,9 @@
 ## what did i learn
     - many don't know how to search for things
     - many can't type
+    - many use the search bar like google
+    - think about it: based on closest match patterns, qcop can show closest matches if 0 hits returned
+    - clean search queries even more
 
 A query has the following fields stored in a CSV row:
 

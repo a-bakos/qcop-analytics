@@ -12,7 +12,12 @@ pub const INVALID_KEYWORD_LIST: [&str; 1] = ["{search_term_string}"];
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
 /// into the binary at the moment.
-pub const TAINTED_SEARCHES: [&str; 13] = [
+pub const TAINTED_SEARCHES: [&str; 26] = [
+    "search_term_string",
+    ".php",
+    ".html",
+    "=",
+    "--",
     "(select",
     "varchar",
     "|",
@@ -21,11 +26,19 @@ pub const TAINTED_SEARCHES: [&str; 13] = [
     "/page",
     "/and",
     "__import__",
-    "waitfor--",
+    "waitfor",
     "delay--",
     "xmlrpc",
     "and--",
     "or--",
+    "app/",
+    "invokefunction",
+    "/script",
+    "script/",
+    ":alert",
+    "\\u",
+    "2000\\",
+    "2000/",
 ];
 
 // DEV values

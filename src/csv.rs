@@ -67,6 +67,7 @@ pub fn parse_csv(
     }
     println!("Parsing finished.");
     println!("Skipped items: {:?}", skipped_items);
+    println!("Collection length: {:?}", collection.map.len());
     Ok(())
 }
 
