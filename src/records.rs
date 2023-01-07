@@ -1,15 +1,23 @@
 use std::collections::HashMap;
 
+// These variants used to specify the search's type for statistics
+pub enum STAT_TYPE {
+    DOI,
+    InvalidSearch,
+}
+
 #[derive(Debug)]
 pub struct RecordCollection {
     /// map meaning: [keyword, (count, metadata)]
     pub map: HashMap<String, (u32, CleanRecordContainer)>,
+    stats: HashMap<String, u32>,
 }
 
 impl RecordCollection {
     pub fn new() -> Self {
         Self {
             map: HashMap::new(),
+            stats: HashMap::new(),
         }
     }
 
@@ -23,6 +31,17 @@ impl RecordCollection {
             values.1.add_to_list(record);
             values.0 += 1;
         }
+    }
+
+    pub fn add_to_stats(&mut self, stat: STAT_TYPE) {
+        match stat {
+            STAT_TYPE::DOI => todo!(),
+            STAT_TYPE::InvalidSearch => todo!(),
+        }
+    }
+
+    pub fn show_stats(&self) {
+        todo!();
     }
 }
 
