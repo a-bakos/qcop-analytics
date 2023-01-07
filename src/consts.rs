@@ -60,3 +60,7 @@ pub const CSV_OUTPUT_FILE_NAME: &str = "outtest.csv";
 pub const DEFAULT_KEYWORD_INVALID: &str = "{invalid_keyword}";
 
 pub const DEFAULT_MISSING_HITS: i32 = -1; // could be i16
+
+/// Stat type variations - may need different format later
+pub const STAT_DOI: &str = "doi";
+pub const STAT_INVALID: &str = "invalid";

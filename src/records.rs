@@ -1,3 +1,4 @@
+use crate::consts;
 use std::collections::HashMap;
 
 // These variants used to specify the search's type for statistics
@@ -5,9 +6,6 @@ pub enum STAT_TYPE {
     DOI,
     InvalidSearch,
 }
-
-const STAT_DOI: &str = "doi";
-const STAT_INVALID: &str = "invalid";
 
 #[derive(Debug)]
 pub struct RecordCollection {
@@ -40,18 +38,19 @@ impl RecordCollection {
         match stat {
             STAT_TYPE::DOI => {
                 let mut counter: u32;
-                if self.stats.get(STAT_DOI).is_some() {
-                    counter = self.stats.get(STAT_DOI).unwrap().clone();
+                if self.stats.get(consts::STAT_DOI).is_some() {
+                    counter = self.stats.get(consts::STAT_DOI).unwrap().clone();
                     counter += 1;
                 } else {
                     counter = 1;
                 }
-                self.stats.insert(STAT_DOI.to_owned(), counter);
+                self.stats.insert(consts::STAT_DOI.to_owned(), counter);
             }
             STAT_TYPE::InvalidSearch => todo!(),
         }
     }
 
+    // TODO better formatting
     pub fn show_stats(&self) {
         println!("{:#?}", self.stats);
     }
