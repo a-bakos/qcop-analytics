@@ -34,6 +34,7 @@ pub fn parse_csv(
                 }
 
                 let processed_kw = data_processor::keyword(keyword);
+                data_processor::handle_if_meaningful(processed_kw.as_str(), collection);
 
                 // Skip, if keyword is invalid
                 if processed_kw == consts::DEFAULT_KEYWORD_INVALID {

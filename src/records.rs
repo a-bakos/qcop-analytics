@@ -6,6 +6,9 @@ pub enum STAT_TYPE {
     InvalidSearch,
 }
 
+const STAT_DOI: &str = "doi";
+const STAT_INVALID: &str = "invalid";
+
 #[derive(Debug)]
 pub struct RecordCollection {
     /// map meaning: [keyword, (count, metadata)]
@@ -35,13 +38,22 @@ impl RecordCollection {
 
     pub fn add_to_stats(&mut self, stat: STAT_TYPE) {
         match stat {
-            STAT_TYPE::DOI => todo!(),
+            STAT_TYPE::DOI => {
+                let mut counter: u32;
+                if self.stats.get(STAT_DOI).is_some() {
+                    counter = self.stats.get(STAT_DOI).unwrap().clone();
+                    counter += 1;
+                } else {
+                    counter = 1;
+                }
+                self.stats.insert(STAT_DOI.to_owned(), counter);
+            }
             STAT_TYPE::InvalidSearch => todo!(),
         }
     }
 
     pub fn show_stats(&self) {
-        todo!();
+        println!("{:#?}", self.stats);
     }
 }
 

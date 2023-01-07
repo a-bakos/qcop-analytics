@@ -1,4 +1,7 @@
-use crate::consts;
+use crate::{
+    consts,
+    records::{self, RecordCollection},
+};
 use regex::Regex;
 
 pub fn default() -> String {
@@ -25,8 +28,8 @@ pub fn target_url(url: &str) -> String {
 
 pub fn keyword(keyword: &str) -> String {
     let mut processed_kw = keyword.trim().to_string();
-
     // Find "+" in kw and replace it with whitespace
+    // TODO!
     processed_kw = processed_kw.replace('+', " ");
 
     if filter_known_invalid(keyword) {
@@ -44,25 +47,23 @@ pub fn keyword(keyword: &str) -> String {
         return processed_kw;
     }
 
-    processed_kw = handle_if_meaningful(keyword);
-
     processed_kw
 }
 
-fn handle_if_meaningful(keyword: &str) -> String {
-    handle_if_search_is_doi(keyword);
+pub fn handle_if_meaningful(keyword: &str, collection: &mut records::RecordCollection) -> String {
+    handle_if_search_is_doi(keyword, collection);
 
     keyword.to_string()
 }
 
-fn handle_if_search_is_doi(keyword: &str) -> bool {
+fn handle_if_search_is_doi(keyword: &str, collection: &mut records::RecordCollection) -> bool {
     // DOI's start with 10.xxxx, where x = a digit
     match keyword.to_lowercase().find("10.") {
         Some(_) => {
             let re = Regex::new(r"(?i)10.\d{4}").unwrap();
             if true == re.is_match(keyword) {
-                println!("Found DOI search! {:#?}", keyword);
-                // TODO store DOI in search stats
+                //println!("Found DOI search! {:#?}", keyword);
+                collection.add_to_stats(records::STAT_TYPE::DOI);
                 return true;
             }
             false
@@ -74,7 +75,7 @@ fn handle_if_search_is_doi(keyword: &str) -> bool {
 fn multi_word_filter(keyword: &str) -> bool {
     let re = Regex::new(r"(?i)\b(and|like|or)\b.*\b(and|like|or)\b.*\b(and|like|or)\b").unwrap();
     if true == re.is_match(keyword) {
-        println!("FOUND IT in here!: {:#?}", keyword);
+        //println!("FOUND IT in here!: {:#?}", keyword);
         for cap in re.captures_iter(keyword) {
             if cap[1].to_lowercase() == cap[2].to_lowercase()
                 && cap[2].to_lowercase() == cap[3].to_lowercase()

@@ -10,6 +10,7 @@ use crate::records::RecordCollection;
 fn main() {
     let mut collection: RecordCollection = RecordCollection::new();
     let _parse = parse_csv(consts::CSV_INPUT_FILE_NAME, &mut collection);
+    collection.show_stats();
     let _write = write_to_csv(consts::CSV_OUTPUT_FILE_NAME, collection);
     println!("Finished.");
 }
