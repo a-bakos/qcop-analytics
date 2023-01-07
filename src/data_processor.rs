@@ -1,7 +1,4 @@
-use crate::{
-    consts,
-    records::{self, RecordCollection},
-};
+use crate::{consts, records};
 use regex::Regex;
 
 pub fn default() -> String {
