@@ -39,16 +39,39 @@ pub fn keyword(keyword: &str) -> String {
         processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
-
-    if true == multi_filter(keyword) {
+    if true == multi_word_filter(keyword) {
         processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
 
+    processed_kw = handle_if_meaningful(keyword);
+
     processed_kw
 }
 
-fn multi_filter(keyword: &str) -> bool {
+fn handle_if_meaningful(keyword: &str) -> String {
+    handle_if_search_is_doi(keyword);
+
+    keyword.to_string()
+}
+
+fn handle_if_search_is_doi(keyword: &str) -> bool {
+    // DOI's start with 10.xxxx, where x = a digit
+    match keyword.to_lowercase().find("10.") {
+        Some(_) => {
+            let re = Regex::new(r"(?i)10.\d{4}").unwrap();
+            if true == re.is_match(keyword) {
+                println!("Found DOI search! {:#?}", keyword);
+                // TODO store DOI in search stats
+                return true;
+            }
+            false
+        }
+        None => false,
+    }
+}
+
+fn multi_word_filter(keyword: &str) -> bool {
     let re = Regex::new(r"(?i)\b(and|like|or)\b.*\b(and|like|or)\b.*\b(and|like|or)\b").unwrap();
     if true == re.is_match(keyword) {
         println!("FOUND IT in here!: {:#?}", keyword);
