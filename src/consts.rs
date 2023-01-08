@@ -14,7 +14,7 @@ pub const INVALID_KEYWORD_START_LIST: [&str; 3] = ["1/", "1\\", "1%"];
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
 /// into the binary at the moment.
-pub const TAINTED_SEARCHES: [&str; 52] = [
+pub const TAINTED_SEARCHES: [&str; 53] = [
     "search_term_string",
     ".php",
     ".html",
@@ -66,6 +66,7 @@ pub const TAINTED_SEARCHES: [&str; 52] = [
     ";foo",
     "/home",
     "()",
+    ";sleep",
     "printf",
 ];
 

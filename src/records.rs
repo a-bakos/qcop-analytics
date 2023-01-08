@@ -1,5 +1,5 @@
 use crate::consts;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 // These variants used to specify the search's type for statistics
 pub enum STAT_TYPE {
@@ -10,14 +10,14 @@ pub enum STAT_TYPE {
 #[derive(Debug)]
 pub struct RecordCollection {
     /// map meaning: [keyword, (count, metadata)]
-    pub map: HashMap<String, (u32, CleanRecordContainer)>,
+    pub map: BTreeMap<String, CleanRecordContainer>,
     stats: HashMap<String, u32>,
 }
 
 impl RecordCollection {
     pub fn new() -> Self {
         Self {
-            map: HashMap::new(),
+            map: BTreeMap::new(),
             stats: HashMap::new(),
         }
     }
@@ -25,12 +25,15 @@ impl RecordCollection {
     pub fn add(&mut self, record: CleanRecord) {
         let keyword: String = record.keyword.clone();
         if self.map.get(&keyword).is_none() {
-            let clean_record_container = CleanRecordContainer { list: vec![record] };
-            self.map.insert(keyword, (1, clean_record_container));
+            let clean_record_container = CleanRecordContainer {
+                counter: 1,
+                list: vec![record],
+            };
+            self.map.insert(keyword, clean_record_container);
         } else {
             let values = self.map.get_mut(&keyword).unwrap();
-            values.1.add_to_list(record);
-            values.0 += 1;
+            values.counter += 1;
+            values.add_to_list(record);
         }
     }
 
@@ -55,7 +58,7 @@ impl RecordCollection {
                     counter = 1;
                 }
                 self.stats.insert(consts::STAT_INVALID.to_owned(), counter);
-            },
+            }
         }
     }
 
@@ -67,12 +70,35 @@ impl RecordCollection {
 
 #[derive(Debug)]
 pub struct CleanRecordContainer {
+    pub counter: u32,
     list: Vec<CleanRecord>,
 }
 
 impl CleanRecordContainer {
     fn add_to_list(&mut self, record: CleanRecord) {
         self.list.push(record);
+    }
+}
+
+impl PartialEq for CleanRecordContainer {
+    fn eq(&self, other: &Self) -> bool {
+        // Return true if the CleanRecordContainer (counter) values are equal, false otherwise
+        self.counter == other.counter
+    }
+}
+
+impl Eq for CleanRecordContainer {}
+
+impl PartialOrd for CleanRecordContainer {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        // Return the ordering of the two CleanRecordContainer values
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for CleanRecordContainer {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.counter.cmp(&other.counter)
     }
 }
 

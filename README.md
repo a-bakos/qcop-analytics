@@ -17,11 +17,13 @@
 
 ## initial objectives
     - find most searched for keywords
+    - order output by most searched
 
 ## what did i learn
     - many don't know how to search for things
     - many can't type
     - many use the search bar like google
+        - we need better search
     - think about it: based on closest match patterns, qcop can show closest matches if 0 hits returned
     - clean search queries even more
 
@@ -52,7 +54,7 @@ admin/\\think\\Request/input,5
 \\x65\\x6e\\x63\\x75\\x68\\x6f\\x61\\x47,1
 () { :;}; printf \&quot;detection[%s]string\&quot; \&quot;CqrjIlFYXQIkXsH\&quot;,1
 %2529%2520AND%252078%2520like%252078%2520OR%25201234%2520like%2520%25287276524,1
-
+2000&amp;sleep 1&amp;\&#039;\\\&quot;`0&amp;sleep 1&amp;`\&#039;,16
 
 
 

@@ -85,7 +85,7 @@ pub fn write_to_csv(
 
     for (key, val) in collection.iter() {
         let keyword = key;
-        let count = val.0.to_string();
+        let count = val.counter.to_string();
         wtr.write_record([keyword, count.as_str()])?;
     }
 
