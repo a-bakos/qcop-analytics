@@ -46,7 +46,16 @@ impl RecordCollection {
                 }
                 self.stats.insert(consts::STAT_DOI.to_owned(), counter);
             }
-            STAT_TYPE::InvalidSearch => todo!(),
+            STAT_TYPE::InvalidSearch => {
+                let mut counter: u32;
+                if self.stats.get(consts::STAT_INVALID).is_some() {
+                    counter = self.stats.get(consts::STAT_INVALID).unwrap().clone();
+                    counter += 1;
+                } else {
+                    counter = 1;
+                }
+                self.stats.insert(consts::STAT_INVALID.to_owned(), counter);
+            },
         }
     }
 

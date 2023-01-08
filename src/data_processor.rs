@@ -101,6 +101,12 @@ fn filter_known_invalid(keyword: &str) -> bool {
             return true;
         }
     }
+
+    for invalid_kw_start in consts::INVALID_KEYWORD_START_LIST.into_iter() {
+        if keyword.starts_with(invalid_kw_start) {
+            return true;
+        }
+    }
     false
 }
 
