@@ -8,11 +8,13 @@ pub const STORE_INVALID_ITEMS: bool = true;
 /// recorded for some reason.
 pub const INVALID_KEYWORD_LIST: [&str; 1] = ["{search_term_string}"];
 
+pub const INVALID_KEYWORD_START_LIST: [&str; 3] = ["1/", "1\\", "1%"];
+
 /// Define characters and keywords here that would make a search entry tainted
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
 /// into the binary at the moment.
-pub const TAINTED_SEARCHES: [&str; 35] = [
+pub const TAINTED_SEARCHES: [&str; 52] = [
     "search_term_string",
     ".php",
     ".html",
@@ -46,8 +48,25 @@ pub const TAINTED_SEARCHES: [&str; 35] = [
     ".pdf",
     "file:",
     "web-inf",
+    "web.config",
+    "/index",
+    "\\index",
+    "index/",
+    "index\\",
+    "..;/",
+    "/common/",
+    ".ptst.io",
+    "win.ini",
+    "\\&#039;",
     "gtm.start",
-    "appcheck.com",
+    "appcheck",
+    ".zip",
+    ".rar",
+    ".exe",
+    ";foo",
+    "/home",
+    "()",
+    "printf",
 ];
 
 // DEV values
