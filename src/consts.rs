@@ -14,7 +14,7 @@ pub const INVALID_KEYWORD_START_LIST: [&str; 3] = ["1/", "1\\", "1%"];
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
 /// into the binary at the moment.
-pub const TAINTED_SEARCHES: [&str; 53] = [
+pub const TAINTED_SEARCHES: [&str; 73] = [
     "search_term_string",
     ".php",
     ".html",
@@ -43,11 +43,14 @@ pub const TAINTED_SEARCHES: [&str; 53] = [
     "2000/",
     "javascript",
     "http",
+    ".doc",
     ".xml",
     ".asp",
     ".pdf",
+    "*pdf",
     "file:",
     "web-inf",
+    "web-console",
     "web.config",
     "/index",
     "\\index",
@@ -55,7 +58,7 @@ pub const TAINTED_SEARCHES: [&str; 53] = [
     "index\\",
     "..;/",
     "/common/",
-    ".ptst.io",
+    "ptst.io",
     "win.ini",
     "\\&#039;",
     "gtm.start",
@@ -68,6 +71,23 @@ pub const TAINTED_SEARCHES: [&str; 53] = [
     "()",
     ";sleep",
     "printf",
+    "{",
+    "}",
+    "alert(",
+    "document.cookie",
+    "intval(",
+    "./",
+    ".\\",
+    "...",
+    ".bash_",
+    ".ens",
+    ".env",
+    ".yml",
+    ".wav",
+    "passwd",
+    ".git",
+    "192.",
+    "@",
 ];
 
 // DEV values
