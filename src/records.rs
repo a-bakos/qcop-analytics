@@ -40,24 +40,16 @@ impl RecordCollection {
     pub fn add_to_stats(&mut self, stat: STAT_TYPE) {
         match stat {
             STAT_TYPE::DOI => {
-                let mut counter: u32;
-                if self.stats.get(consts::STAT_DOI).is_some() {
-                    counter = self.stats.get(consts::STAT_DOI).unwrap().clone();
-                    counter += 1;
-                } else {
-                    counter = 1;
-                }
-                self.stats.insert(consts::STAT_DOI.to_owned(), counter);
+                self.stats
+                    .entry(consts::STAT_DOI.to_string())
+                    .and_modify(|count| *count += 1)
+                    .or_insert(1);
             }
             STAT_TYPE::InvalidSearch => {
-                let mut counter: u32;
-                if self.stats.get(consts::STAT_INVALID).is_some() {
-                    counter = self.stats.get(consts::STAT_INVALID).unwrap().clone();
-                    counter += 1;
-                } else {
-                    counter = 1;
-                }
-                self.stats.insert(consts::STAT_INVALID.to_owned(), counter);
+                self.stats
+                    .entry(consts::STAT_INVALID.to_string())
+                    .and_modify(|count| *count += 1)
+                    .or_insert(1);
             }
         }
     }
