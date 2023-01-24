@@ -1,4 +1,4 @@
-# qcop search results analyzer
+# qcop search results analyzer | WORK IN PROGRESS!
 
 ## high level overview
 
