@@ -1,4 +1,5 @@
 use crate::consts;
+use std::cmp::Ordering;
 use std::collections::{BTreeMap, HashMap};
 
 // These variants used to specify the search's type for statistics
@@ -17,7 +18,7 @@ pub struct RecordCollection {
 impl RecordCollection {
     pub fn new() -> Self {
         Self {
-            map: BTreeMap::new(),
+            map: BTreeMap::new(), // BTrees are inherently ordered by their keys
             stats: HashMap::new(),
         }
     }
@@ -71,29 +72,29 @@ impl CleanRecordContainer {
         self.list.push(record);
     }
 }
-
-impl PartialEq for CleanRecordContainer {
-    fn eq(&self, other: &Self) -> bool {
-        // Return true if the CleanRecordContainer (counter) values are equal, false otherwise
-        self.counter == other.counter
-    }
-}
-
+/*
 impl Eq for CleanRecordContainer {}
 
-impl PartialOrd for CleanRecordContainer {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        // Return the ordering of the two CleanRecordContainer values
-        Some(self.cmp(other))
-    }
-}
-
 impl Ord for CleanRecordContainer {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> Ordering {
         self.counter.cmp(&other.counter)
     }
 }
 
+impl PartialOrd for CleanRecordContainer {
+    fn partial_cmp(&self, rhs: &Self) -> Option<Ordering> {
+        // Return the ordering of the two CleanRecordContainer values
+        self.counter.partial_cmp(&rhs.counter)
+    }
+}
+
+impl PartialEq for CleanRecordContainer {
+    fn eq(&self, rhs: &Self) -> bool {
+        // Return true if the CleanRecordContainer (counter) values are equal, false otherwise
+        self.counter == rhs.counter
+    }
+}
+*/
 #[derive(Debug)]
 pub struct CleanRecord {
     pub date_time: String,
