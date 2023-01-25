@@ -28,6 +28,7 @@ pub fn keyword(keyword: &str) -> String {
     // Find "+" in kw and replace it with whitespace
     // TODO!
     processed_kw = processed_kw.replace('+', " ");
+    processed_kw = processed_kw.to_lowercase();
 
     if filter_known_invalid(keyword) {
         maybe_store_invalid_keyword(keyword);
