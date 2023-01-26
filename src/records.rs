@@ -15,7 +15,7 @@ pub struct RecordCollection {
     pub map: BTreeMap<String, CleanRecordContainer>, // BTrees are inherently ordered by their keys
     stats: HashMap<String, u32>,
 
-    pub map_by_counter: BTreeMap<u32, CleanRecordContainer>,
+    pub map_by_counter: BTreeMap<u32, Vec<CleanRecord>>,
 }
 
 impl RecordCollection {
@@ -25,25 +25,6 @@ impl RecordCollection {
             stats: HashMap::new(),
 
             map_by_counter: BTreeMap::new(),
-        }
-    }
-
-    // TODO
-    pub fn sort_by_counter(&mut self) {
-        for entry in self.map.iter_mut() {
-            println!("{:#?}", entry);
-
-            let the_keyword = entry.0;
-            let kw_meta = entry.1.clone();
-            let counter = entry.1.counter;
-
-            // if counter is not in self.map_by_counter
-            // then add it in as key
-            // and add keyword as value IN a new vec of CleanRecordContainer-like list holding CleanRecord's
-            // think: references to CleanRecords would work? referencing the items in self.map.list
-            // cannot use CleanRecordContainer because we need a simpler struct (ie no counter field in here)
-
-            todo!();
         }
     }
 
@@ -79,6 +60,42 @@ impl RecordCollection {
                     .or_insert(1);
             }
         }
+    }
+
+    // TODO
+    pub fn sort_by_counter(&mut self) {
+        for entry in self.map.iter_mut() {
+            // let the_keyword = entry.0;
+            let kw_meta = entry.1.clone();
+            let counter = entry.1.counter;
+
+            let cleanrecordvec = kw_meta.list;
+
+            // if counter is not in self.map_by_counter
+            // then add it in as key
+            // and add keyword as value IN a new vec of CleanRecordContainer-like list holding CleanRecord's
+            // think: references to CleanRecords would work? referencing the items in self.map.list
+            // cannot use CleanRecordContainer because we need a simpler struct (ie no counter field in here)
+
+            if self.map_by_counter.get(&counter).is_none() {
+                self.map_by_counter.insert(counter, cleanrecordvec);
+            } else {
+                // key exists, expand vec
+                let entry = self.map_by_counter.get_mut(&counter).unwrap();
+                for cleanrecord in cleanrecordvec.iter() {
+                    let newrecord = CleanRecord {
+                        date_time: cleanrecord.date_time.clone(),
+                        keyword: cleanrecord.keyword.clone(),
+                        source: cleanrecord.source.clone(),
+                        hits: cleanrecord.hits.clone(),
+                        target: cleanrecord.target.clone(),
+                    };
+                    entry.push(newrecord);
+                }
+            }
+            // todo!();
+        }
+        println!("{:#?}", self.map_by_counter);
     }
 
     // TODO better formatting
