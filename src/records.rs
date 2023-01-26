@@ -71,11 +71,17 @@ impl RecordCollection {
 
             let cleanrecordvec = kw_meta.list;
 
+            // step 1
             // if counter is not in self.map_by_counter
             // then add it in as key
             // and add keyword as value IN a new vec of CleanRecordContainer-like list holding CleanRecord's
             // think: references to CleanRecords would work? referencing the items in self.map.list
             // cannot use CleanRecordContainer because we need a simpler struct (ie no counter field in here)
+
+            // step 2
+            // think about further grouping options
+            // the vec may need to change to a hashmap or btreemap, so:
+            // counter: [ "keyword" => Vec<CleanRecord> ]
 
             if self.map_by_counter.get(&counter).is_none() {
                 self.map_by_counter.insert(counter, cleanrecordvec);
