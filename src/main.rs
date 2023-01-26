@@ -12,6 +12,10 @@ fn main() {
     let _parse = parse_csv(consts::CSV_INPUT_FILE_NAME, &mut collection);
     println!("{:#?}", collection);
     collection.show_stats();
+
+    println!("Sorting by counter...");
+    collection.sort_by_counter();
+
     let _write = write_to_csv(consts::CSV_OUTPUT_FILE_NAME, collection);
     println!("Finished.");
 }

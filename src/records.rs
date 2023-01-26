@@ -1,5 +1,6 @@
 use crate::consts;
 use std::cmp::Ordering;
+use std::collections::btree_map::Entry;
 use std::collections::{BTreeMap, HashMap};
 
 // These variants used to specify the search's type for statistics
@@ -11,20 +12,45 @@ pub enum STAT_TYPE {
 #[derive(Debug)]
 pub struct RecordCollection {
     /// map meaning: [keyword, (count, metadata)]
-    pub map: BTreeMap<String, CleanRecordContainer>,
+    pub map: BTreeMap<String, CleanRecordContainer>, // BTrees are inherently ordered by their keys
     stats: HashMap<String, u32>,
+
+    pub map_by_counter: BTreeMap<u32, CleanRecordContainer>,
 }
 
 impl RecordCollection {
     pub fn new() -> Self {
         Self {
-            map: BTreeMap::new(), // BTrees are inherently ordered by their keys
+            map: BTreeMap::new(),
             stats: HashMap::new(),
+
+            map_by_counter: BTreeMap::new(),
+        }
+    }
+
+    // TODO
+    pub fn sort_by_counter(&mut self) {
+        for entry in self.map.iter_mut() {
+            println!("{:#?}", entry);
+
+            let the_keyword = entry.0;
+            let kw_meta = entry.1.clone();
+            let counter = entry.1.counter;
+
+            // if counter is not in self.map_by_counter
+            // then add it in as key
+            // and add keyword as value IN a new vec of CleanRecordContainer-like list holding CleanRecord's
+            // think: references to CleanRecords would work? referencing the items in self.map.list
+            // cannot use CleanRecordContainer because we need a simpler struct (ie no counter field in here)
+
+            todo!();
         }
     }
 
     pub fn add(&mut self, record: CleanRecord) {
         let keyword: String = record.keyword.clone();
+
+        // A-Z
         if self.map.get(&keyword).is_none() {
             let clean_record_container = CleanRecordContainer {
                 counter: 1,
@@ -61,7 +87,7 @@ impl RecordCollection {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CleanRecordContainer {
     pub counter: u32,
     list: Vec<CleanRecord>,
@@ -72,6 +98,7 @@ impl CleanRecordContainer {
         self.list.push(record);
     }
 }
+
 /*
 impl Eq for CleanRecordContainer {}
 
@@ -95,7 +122,7 @@ impl PartialEq for CleanRecordContainer {
     }
 }
 */
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CleanRecord {
     pub date_time: String,
     pub keyword: String,
