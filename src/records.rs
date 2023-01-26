@@ -99,29 +99,6 @@ impl CleanRecordContainer {
     }
 }
 
-/*
-impl Eq for CleanRecordContainer {}
-
-impl Ord for CleanRecordContainer {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.counter.cmp(&other.counter)
-    }
-}
-
-impl PartialOrd for CleanRecordContainer {
-    fn partial_cmp(&self, rhs: &Self) -> Option<Ordering> {
-        // Return the ordering of the two CleanRecordContainer values
-        self.counter.partial_cmp(&rhs.counter)
-    }
-}
-
-impl PartialEq for CleanRecordContainer {
-    fn eq(&self, rhs: &Self) -> bool {
-        // Return true if the CleanRecordContainer (counter) values are equal, false otherwise
-        self.counter == rhs.counter
-    }
-}
-*/
 #[derive(Debug, Clone)]
 pub struct CleanRecord {
     pub date_time: String,
