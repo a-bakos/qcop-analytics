@@ -10,6 +10,7 @@ pub fn parse_csv(
     file_path: &str,
     collection: &mut records::RecordCollection,
 ) -> Result<(), Box<dyn Error>> {
+    println!("CSV to parse: {}", file_path);
     println!("Parsing CSV...");
     let mut reader = Reader::from_path(file_path)?;
     let mut skipped_items: u32 = 0;

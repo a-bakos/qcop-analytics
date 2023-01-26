@@ -95,6 +95,12 @@ pub const TAINTED_SEARCHES: [&str; 74] = [
 pub const CSV_INPUT_FILE_NAME: &str = "export/test.csv"; //"export/as-wp_q_cop.csv";
 pub const CSV_OUTPUT_FILE_NAME: &str = "outtest.csv";
 
+// Ordered files
+pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_AZ: &str = "outtest-order-by-az.csv";
+pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_COUNT: &str = "outtest-order-by-count.csv";
+pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_SOURCE: &str = "outtest-order-by-source.csv";
+pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET: &str = "outtest-order-by-target.csv";
+
 /// Defaults
 
 /// Used internally after a KW has been treated by the program
