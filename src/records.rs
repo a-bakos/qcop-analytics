@@ -15,7 +15,8 @@ pub struct RecordCollection {
     pub map: BTreeMap<String, CleanRecordContainer>, // BTrees are inherently ordered by their keys
     stats: HashMap<String, u32>,
 
-    pub map_by_counter: BTreeMap<u32, Vec<CleanRecord>>,
+    //pub map_by_counter: BTreeMap<u32, Vec<CleanRecord>>,
+    pub map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
 }
 
 impl RecordCollection {
@@ -65,11 +66,11 @@ impl RecordCollection {
     // TODO
     pub fn sort_by_counter(&mut self) {
         for entry in self.map.iter_mut() {
-            // let the_keyword = entry.0;
-            let kw_meta = entry.1.clone();
-            let counter = entry.1.counter;
+            let the_keyword: &String = entry.0;
+            let kw_meta: CleanRecordContainer = entry.1.clone();
+            let counter: u32 = entry.1.counter;
 
-            let cleanrecordvec = kw_meta.list;
+            let cleanrecordvec: Vec<CleanRecord> = kw_meta.list;
 
             // step 1
             // if counter is not in self.map_by_counter
@@ -84,22 +85,23 @@ impl RecordCollection {
             // counter: [ "keyword" => Vec<CleanRecord> ]
 
             if self.map_by_counter.get(&counter).is_none() {
-                self.map_by_counter.insert(counter, cleanrecordvec);
+                let mut btreeinner: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
+                btreeinner.insert(the_keyword.clone(), cleanrecordvec);
+                self.map_by_counter.insert(counter, btreeinner);
             } else {
-                // key exists, expand vec
+                // key (aka counter) exists, expand the vec
                 let entry = self.map_by_counter.get_mut(&counter).unwrap();
                 for cleanrecord in cleanrecordvec.iter() {
-                    let newrecord = CleanRecord {
+                    let newrecord: CleanRecord = CleanRecord {
                         date_time: cleanrecord.date_time.clone(),
                         keyword: cleanrecord.keyword.clone(),
                         source: cleanrecord.source.clone(),
                         hits: cleanrecord.hits.clone(),
                         target: cleanrecord.target.clone(),
                     };
-                    entry.push(newrecord);
+                    entry.insert(the_keyword.clone(), vec![newrecord]);
                 }
             }
-            // todo!();
         }
         println!("{:#?}", self.map_by_counter);
     }
