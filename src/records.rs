@@ -1,6 +1,4 @@
 use crate::consts;
-use std::cmp::Ordering;
-use std::collections::btree_map::Entry;
 use std::collections::{BTreeMap, HashMap};
 
 // These variants used to specify the search's type for statistics
@@ -15,7 +13,6 @@ pub struct RecordCollection {
     pub map: BTreeMap<String, CleanRecordContainer>, // BTrees are inherently ordered by their keys
     stats: HashMap<String, u32>,
 
-    //pub map_by_counter: BTreeMap<u32, Vec<CleanRecord>>,
     pub map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
 }
 
