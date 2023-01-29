@@ -6,6 +6,11 @@ use crate::records;
 use csv::{Reader, StringRecord, WriterBuilder};
 use std::error::Error;
 
+pub enum CSV_TYPE {
+    Main,
+    OrderByCount,
+}
+
 pub fn parse_csv(
     file_path: &str,
     collection: &mut records::RecordCollection,
@@ -78,7 +83,7 @@ pub fn parse_csv(
 pub fn write_to_csv(
     file_path: &str,
     collection: &records::RecordCollection,
-    csv_type: u8
+    csv_type: CSV_TYPE
 ) -> Result<(), Box<dyn Error>> {
     println!("Writing results into CSV...");
     let mut wtr = WriterBuilder::new().from_path(file_path)?;
@@ -88,7 +93,7 @@ pub fn write_to_csv(
     // As a first step, I want to get it to produce the outcome I need
 
     match csv_type {
-        1 => {
+        CSV_TYPE::Main => {
             let collection = &collection.map;
             for (key, val) in collection.iter() {
                 let keyword = key;
@@ -96,7 +101,7 @@ pub fn write_to_csv(
                 wtr.write_record([keyword, count.as_str()])?;
             }
         },
-        2 => {
+        CSV_TYPE::OrderByCount => {
             let collection = &collection.map_by_counter;
             for (key, val) in collection.iter() {
                 // get every keyword and get the corresponding counter and print count -> kw

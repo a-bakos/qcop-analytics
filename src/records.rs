@@ -2,6 +2,7 @@ use crate::consts;
 use std::collections::{BTreeMap, HashMap};
 
 // These variants used to specify the search's type for statistics
+#[allow(clippy::upper_case_acronyms)]
 pub enum STAT_TYPE {
     DOI,
     InvalidSearch,
@@ -93,7 +94,7 @@ impl RecordCollection {
                         date_time: cleanrecord.date_time.clone(),
                         keyword: cleanrecord.keyword.clone(),
                         source: cleanrecord.source.clone(),
-                        hits: cleanrecord.hits.clone(),
+                        hits: cleanrecord.hits,
                         target: cleanrecord.target.clone(),
                     };
                     entry.insert(the_keyword.clone(), vec![newrecord]);

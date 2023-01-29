@@ -115,12 +115,9 @@ fn filter_known_invalid(keyword: &str) -> bool {
 fn filter_unknown_invalid(keyword: &str) -> bool {
     let mut match_found = false;
     for tainted_kw in consts::TAINTED_SEARCHES.into_iter() {
-        match keyword.to_lowercase().find(tainted_kw) {
-            Some(_) => {
-                match_found = true;
-                break;
-            }
-            None => (),
+        if keyword.to_lowercase().contains(tainted_kw) {
+            match_found = true;
+            break;
         }
     }
     match_found
