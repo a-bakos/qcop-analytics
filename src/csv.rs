@@ -84,7 +84,7 @@ pub fn parse_csv(
 pub fn write_to_csv(
     file_path: &str,
     collection: &records::RecordCollection,
-    csv_type: CSV_TYPE
+    csv_type: CSV_TYPE,
 ) -> Result<(), Box<dyn Error>> {
     println!("Writing results into CSV...");
     let mut wtr = WriterBuilder::new().from_path(file_path)?;
@@ -101,7 +101,7 @@ pub fn write_to_csv(
                 let count = val.counter.to_string();
                 wtr.write_record([keyword, count.as_str()])?;
             }
-        },
+        }
         CSV_TYPE::OrderByCount => {
             let collection = &collection.map_by_counter;
             for (key, val) in collection.iter() {
@@ -117,30 +117,8 @@ pub fn write_to_csv(
                         wtr.write_record([count.to_string(), kw.to_string()])?;
                     }
                 }
-
             }
-        },
-    }
-
-
-    wtr.flush()?;
-
-    Ok(())
-}
-
-pub fn write_to_csv_by_count(
-    file_path: &str,
-    collection: &records::RecordCollection,
-) -> Result<(), Box<dyn Error>> {
-    println!("Writing results into CSV 2...");
-    let mut wtr = WriterBuilder::new().from_path(file_path)?;
-
-    let collection = &collection.map;
-
-    for (key, val) in collection.iter() {
-        let keyword = key;
-        let count = val.counter.to_string();
-        wtr.write_record([keyword, count.as_str()])?;
+        }
     }
 
     wtr.flush()?;

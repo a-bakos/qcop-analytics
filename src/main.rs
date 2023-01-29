@@ -16,8 +16,16 @@ fn main() {
     println!("Sorting by counter...");
     collection.sort_by_counter();
 
-    let _write_csv_main = write_to_csv(consts::CSV_OUTPUT_FILE_NAME, &collection, csv::CSV_TYPE::Main);
-    let _write_csv_order_by_count = write_to_csv(consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_COUNT, &collection, csv::CSV_TYPE::OrderByCount);
+    let _write_csv_main = write_to_csv(
+        consts::CSV_OUTPUT_FILE_NAME,
+        &collection,
+        csv::CSV_TYPE::Main,
+    );
+    let _write_csv_order_by_count = write_to_csv(
+        consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_COUNT,
+        &collection,
+        csv::CSV_TYPE::OrderByCount,
+    );
 
     println!("Finished.");
 }
