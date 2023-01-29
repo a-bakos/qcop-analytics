@@ -6,6 +6,7 @@ use crate::records;
 use csv::{Reader, StringRecord, WriterBuilder};
 use std::error::Error;
 
+#[allow(non_camel_case_types)]
 pub enum CSV_TYPE {
     Main,
     OrderByCount,
@@ -15,7 +16,7 @@ pub fn parse_csv(
     file_path: &str,
     collection: &mut records::RecordCollection,
 ) -> Result<(), Box<dyn Error>> {
-    println!("CSV to parse: {}", file_path);
+    println!("CSV to parse: {file_path}");
     println!("Parsing CSV...");
     let mut reader = Reader::from_path(file_path)?;
     let mut skipped_items: u32 = 0;
@@ -75,7 +76,7 @@ pub fn parse_csv(
         collection.add(clean_record);
     }
     println!("Parsing finished.");
-    println!("Skipped items: {:?}", skipped_items);
+    println!("Skipped items: {skipped_items:?}");
     println!("Collection length: {:?}", collection.map.len());
     Ok(())
 }
@@ -119,7 +120,6 @@ pub fn write_to_csv(
 
             }
         },
-        _ => ()
     }
 
 

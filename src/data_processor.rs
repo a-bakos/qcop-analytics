@@ -40,7 +40,7 @@ pub fn keyword(keyword: &str) -> String {
         processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
-    if true == multi_word_filter(keyword) {
+    if multi_word_filter(keyword) {
         processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
@@ -59,7 +59,7 @@ fn handle_if_search_is_doi(keyword: &str, collection: &mut records::RecordCollec
     match keyword.to_lowercase().find("10.") {
         Some(_) => {
             let re = Regex::new(r"(?i)10.\d{4}").unwrap();
-            if true == re.is_match(keyword) {
+            if re.is_match(keyword) {
                 //println!("Found DOI search! {:#?}", keyword);
                 collection.add_to_stats(records::STAT_TYPE::DOI);
                 return true;
@@ -72,7 +72,7 @@ fn handle_if_search_is_doi(keyword: &str, collection: &mut records::RecordCollec
 
 fn multi_word_filter(keyword: &str) -> bool {
     let re = Regex::new(r"(?i)\b(and|like|or)\b.*\b(and|like|or)\b.*\b(and|like|or)\b").unwrap();
-    if true == re.is_match(keyword) {
+    if re.is_match(keyword) {
         //println!("FOUND IT in here!: {:#?}", keyword);
         for cap in re.captures_iter(keyword) {
             if cap[1].to_lowercase() == cap[2].to_lowercase()
@@ -124,7 +124,7 @@ fn filter_unknown_invalid(keyword: &str) -> bool {
 }
 
 // TODO!
-fn maybe_store_invalid_keyword(keyword: &str) {
+fn maybe_store_invalid_keyword(_keyword: &str) {
     if consts::STORE_INVALID_ITEMS {
         //we need a global storage for invalid keywords and we'll consume the parameter
     }

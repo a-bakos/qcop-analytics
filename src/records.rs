@@ -2,7 +2,7 @@ use crate::consts;
 use std::collections::{BTreeMap, HashMap};
 
 // These variants used to specify the search's type for statistics
-#[allow(clippy::upper_case_acronyms)]
+#[allow(clippy::upper_case_acronyms, non_camel_case_types)]
 pub enum STAT_TYPE {
     DOI,
     InvalidSearch,
