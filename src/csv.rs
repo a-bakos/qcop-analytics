@@ -77,12 +77,60 @@ pub fn parse_csv(
 
 pub fn write_to_csv(
     file_path: &str,
-    collection: records::RecordCollection,
+    collection: &records::RecordCollection,
+    csv_type: u8
 ) -> Result<(), Box<dyn Error>> {
     println!("Writing results into CSV...");
     let mut wtr = WriterBuilder::new().from_path(file_path)?;
 
-    let collection = collection.map;
+    // TODO
+    // All of this can probably be refactored to be more idiomatic.
+    // As a first step, I want to get it to produce the outcome I need
+
+    match csv_type {
+        1 => {
+            let collection = &collection.map;
+            for (key, val) in collection.iter() {
+                let keyword = key;
+                let count = val.counter.to_string();
+                wtr.write_record([keyword, count.as_str()])?;
+            }
+        },
+        2 => {
+            let collection = &collection.map_by_counter;
+            for (key, val) in collection.iter() {
+                // get every keyword and get the corresponding counter and print count -> kw
+                let count = key;
+                for btreemapentry in val.iter() {
+                    let mut kw: &String = &"".to_string(); // default
+                    for vecentry in btreemapentry.1.iter() {
+                        if kw == &vecentry.keyword {
+                            continue;
+                        }
+                        kw = &vecentry.keyword;
+                        wtr.write_record([count.to_string(), kw.to_string()])?;
+                    }
+                }
+
+            }
+        },
+        _ => ()
+    }
+
+
+    wtr.flush()?;
+
+    Ok(())
+}
+
+pub fn write_to_csv_by_count(
+    file_path: &str,
+    collection: &records::RecordCollection,
+) -> Result<(), Box<dyn Error>> {
+    println!("Writing results into CSV 2...");
+    let mut wtr = WriterBuilder::new().from_path(file_path)?;
+
+    let collection = &collection.map;
 
     for (key, val) in collection.iter() {
         let keyword = key;
@@ -93,4 +141,14 @@ pub fn write_to_csv(
     wtr.flush()?;
 
     Ok(())
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_fn() {
+        assert_eq!("", "")
+    }
 }
