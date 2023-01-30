@@ -14,7 +14,12 @@ pub const INVALID_KEYWORD_START_LIST: [&str; 3] = ["1/", "1\\", "1%"];
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
 /// into the binary at the moment.
-pub const TAINTED_SEARCHES: [&str; 74] = [
+pub const TAINTED_SEARCHES: [&str; 87] = [
+    "1.",
+    "1#",
+    "1&",
+    "1*",
+    "x_",
     "search_term_string",
     ".php",
     ".html",
@@ -47,6 +52,8 @@ pub const TAINTED_SEARCHES: [&str; 74] = [
     ".xml",
     ".asp",
     ".pdf",
+    ".jpg",
+    ".jpeg",
     "*pdf",
     "file:",
     "web-inf",
@@ -70,6 +77,7 @@ pub const TAINTED_SEARCHES: [&str; 74] = [
     "/home",
     "()",
     ";sleep",
+    "sleep(",
     "printf",
     "{",
     "}",
@@ -89,10 +97,15 @@ pub const TAINTED_SEARCHES: [&str; 74] = [
     ".git",
     "192.",
     "@",
+    "trackingid",
+    "www",
+    "xxx",
+    ".com",
+    "zw5",
 ];
 
 // DEV values
-pub const CSV_INPUT_FILE_NAME: &str = "export/test.csv"; //"export/as-wp_q_cop.csv";
+pub const CSV_INPUT_FILE_NAME: &str = "export/as-wp_q_cop.csv"; // "export/test.csv";
 pub const CSV_OUTPUT_FILE_NAME: &str = "outtest.csv";
 
 // Ordered files
