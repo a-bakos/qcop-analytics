@@ -89,10 +89,6 @@ pub fn write_to_csv(
     println!("Writing results into CSV...");
     let mut wtr = WriterBuilder::new().from_path(file_path)?;
 
-    // TODO
-    // All of this can probably be refactored to be more idiomatic.
-    // As a first step, I want to get it to produce the outcome I need
-
     match csv_type {
         CSV_TYPE::Main => {
             let collection = &collection.map;
@@ -104,17 +100,17 @@ pub fn write_to_csv(
         }
         CSV_TYPE::OrderByCount => {
             let collection = &collection.map_by_counter;
-            for (key, val) in collection.iter() {
+            for (count, keyword_collection) in collection.iter() {
                 // get every keyword and get the corresponding counter and print count -> kw
-                let count = key;
-                for btreemapentry in val.iter() {
-                    let mut kw: &String = &"".to_string(); // default
-                    for vecentry in btreemapentry.1.iter() {
-                        if kw == &vecentry.keyword {
+                for kw_entry in keyword_collection.iter() {
+                    // Store current keyword and skip on duplicates if found
+                    let mut current_keyword: &String = &"".to_string(); // temp kw init
+                    for record in kw_entry.1.iter() {
+                        if current_keyword == &record.keyword {
                             continue;
                         }
-                        kw = &vecentry.keyword;
-                        wtr.write_record([count.to_string(), kw.to_string()])?;
+                        current_keyword = &record.keyword;
+                        wtr.write_record([count.to_string(), current_keyword.to_string()])?;
                     }
                 }
             }
