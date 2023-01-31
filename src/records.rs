@@ -15,6 +15,8 @@ pub struct RecordCollection {
     stats: HashMap<String, u32>,
 
     pub map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
+    pub map_by_target: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>, // count<target, kw_meta>
+                                                                          // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>, // count<source, kw_meta>
 }
 
 impl RecordCollection {
@@ -23,6 +25,7 @@ impl RecordCollection {
             map: BTreeMap::new(),
             stats: HashMap::new(),
             map_by_counter: BTreeMap::new(),
+            map_by_target: BTreeMap::new(),
         }
     }
 
@@ -98,7 +101,32 @@ impl RecordCollection {
                 }
             }
         }
-        println!("{:#?}", self.map_by_counter);
+        //println!("{:#?}", self.map_by_counter);
+    }
+
+    pub fn sort_by_target(&mut self) {
+        for entry in self.map.iter_mut() {
+            let the_keyword: &String = entry.0;
+            let kw_meta: CleanRecordContainer = entry.1.clone();
+            let counter: u32 = entry.1.counter;
+            let cleanrecord_container: Vec<CleanRecord> = kw_meta.list;
+
+            // step 1
+            // get entry by counter
+            // if not found, construct inner btree:
+            // where key will be target url (see if we need to decode it), value is a new CleanRecord
+            // insert entry by count (key) into outer btree [ 100, [ target, [ cleanrecord ] ] ]
+            // if found, just add to inner btree cleanrecordcontainer vec
+            if self.map_by_target.get(&counter).is_none() {
+                //
+            } else {
+                //
+            }
+
+            for record in cleanrecord_container.iter() {
+                let target = &record.target;
+            }
+        }
     }
 
     // TODO better formatting
