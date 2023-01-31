@@ -8,18 +8,15 @@ pub const STORE_INVALID_ITEMS: bool = true;
 /// recorded for some reason.
 pub const INVALID_KEYWORD_LIST: [&str; 1] = ["{search_term_string}"];
 
-pub const INVALID_KEYWORD_START_LIST: [&str; 3] = ["1/", "1\\", "1%"];
+pub const INVALID_KEYWORD_START_LIST: [&str; 6] = ["1/", "1*", "1\\", "1%", "1&", "1$"];
 
 /// Define characters and keywords here that would make a search entry tainted
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
 /// into the binary at the moment.
-pub const TAINTED_SEARCHES: [&str; 92] = [
+pub const TAINTED_SEARCHES: [&str; 89] = [
     "1.",
     "1#",
-    "1&",
-    "1$",
-    "1*",
     "x_",
     "#{",
     "$%",
@@ -108,6 +105,9 @@ pub const TAINTED_SEARCHES: [&str; 92] = [
     ".com",
     "zw5",
 ];
+
+// TODO - will be used for kw that we specifically look for
+pub const SPECIAL_KEYWORD_LIST: [&str; 0] = [];
 
 // DEV values
 pub const CSV_INPUT_FILE_NAME: &str = "export/as-wp_q_cop.csv"; // "export/test.csv";

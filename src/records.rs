@@ -22,7 +22,6 @@ impl RecordCollection {
         Self {
             map: BTreeMap::new(),
             stats: HashMap::new(),
-
             map_by_counter: BTreeMap::new(),
         }
     }
@@ -61,14 +60,12 @@ impl RecordCollection {
         }
     }
 
-    // TODO
     pub fn sort_by_counter(&mut self) {
         for entry in self.map.iter_mut() {
             let the_keyword: &String = entry.0;
             let kw_meta: CleanRecordContainer = entry.1.clone();
             let counter: u32 = entry.1.counter;
-
-            let cleanrecordvec: Vec<CleanRecord> = kw_meta.list;
+            let cleanrecord_container: Vec<CleanRecord> = kw_meta.list;
 
             // step 1
             // if counter is not in self.map_by_counter
@@ -84,12 +81,12 @@ impl RecordCollection {
 
             if self.map_by_counter.get(&counter).is_none() {
                 let mut btreeinner: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
-                btreeinner.insert(the_keyword.clone(), cleanrecordvec);
+                btreeinner.insert(the_keyword.clone(), cleanrecord_container);
                 self.map_by_counter.insert(counter, btreeinner);
             } else {
                 // key (aka counter) exists, expand the vec
                 let entry = self.map_by_counter.get_mut(&counter).unwrap();
-                for cleanrecord in cleanrecordvec.iter() {
+                for cleanrecord in cleanrecord_container.iter() {
                     let newrecord: CleanRecord = CleanRecord {
                         date_time: cleanrecord.date_time.clone(),
                         keyword: cleanrecord.keyword.clone(),
