@@ -10,6 +10,7 @@ use std::error::Error;
 pub enum CSV_TYPE {
     Main,
     OrderByCount,
+    OrderByTarget,
 }
 
 pub fn parse_csv(
@@ -113,6 +114,20 @@ pub fn write_to_csv(
                         wtr.write_record([count.to_string(), current_keyword.to_string()])?;
                     }
                 }
+            }
+        }
+        CSV_TYPE::OrderByTarget => {
+            let collection = &collection.map_by_target;
+            for (count, keyword_collection) in collection.iter() {
+                /*
+                // get every keyword and get the corresponding counter and print count -> kw
+                for kw_entry in keyword_collection.iter() {
+                    // Store current keyword and skip on duplicates if found
+                    let mut target: &String = &"".to_string(); // temp kw init
+                    dbg!(&target);
+                    wtr.write_record([count.to_string(), target.to_string()])?;
+                }*/
+                todo!();
             }
         }
     }

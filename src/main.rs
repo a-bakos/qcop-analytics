@@ -15,6 +15,8 @@ fn main() {
 
     println!("Sorting by counter...");
     collection.sort_by_counter();
+    println!("Sorting by target...");
+    collection.sort_by_target();
 
     let _write_csv_main = write_to_csv(
         consts::CSV_OUTPUT_FILE_NAME,
@@ -25,6 +27,11 @@ fn main() {
         consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_COUNT,
         &collection,
         csv::CSV_TYPE::OrderByCount,
+    );
+    let _write_csv_order_by_target = write_to_csv(
+        consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET,
+        &collection,
+        csv::CSV_TYPE::OrderByTarget,
     );
 
     println!("Finished.");

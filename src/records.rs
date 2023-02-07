@@ -105,28 +105,31 @@ impl RecordCollection {
     }
 
     pub fn sort_by_target(&mut self) {
+        let mut target_holder: BTreeMap<String, u32> = BTreeMap::new();
         for entry in self.map.iter_mut() {
             let the_keyword: &String = entry.0;
             let kw_meta: CleanRecordContainer = entry.1.clone();
             let counter: u32 = entry.1.counter;
             let cleanrecord_container: Vec<CleanRecord> = kw_meta.list;
 
+            for record in cleanrecord_container.iter() {
+                let target = record.target.clone();
+                target_holder
+                    .entry(target)
+                    .and_modify(|count| *count += 1)
+                    .or_insert(1);
+            }
+            /*
             // step 1
             // get entry by counter
             // if not found, construct inner btree:
             // where key will be target url (see if we need to decode it), value is a new CleanRecord
             // insert entry by count (key) into outer btree [ 100, [ target, [ cleanrecord ] ] ]
             // if found, just add to inner btree cleanrecordcontainer vec
-            if self.map_by_target.get(&counter).is_none() {
-                //
-            } else {
-                //
-            }
-
-            for record in cleanrecord_container.iter() {
-                let target = &record.target;
-            }
+             */
         }
+
+        println!("{:#?}", target_holder);
     }
 
     // TODO better formatting
