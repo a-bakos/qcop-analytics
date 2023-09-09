@@ -23,7 +23,7 @@ pub fn target_url(url: &str) -> String {
     url.trim().to_string()
 }
 
-pub fn keyword(keyword: &str) -> String {
+pub fn clean_keyword(keyword: &str) -> String {
     let mut processed_kw = keyword.trim().to_string();
     // Find "+" in kw and replace it with whitespace
     // TODO!

@@ -120,6 +120,17 @@ pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_COUNT: &str = "outtest-order-by-count.cs
 pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_SOURCE: &str = "outtest-order-by-source.csv";
 pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET: &str = "outtest-order-by-target.csv";
 
+pub const CSV_COLUMN_INDEX_ID: usize = 0;
+pub const CSV_COLUMN_INDEX_DATETIME: usize = 1;
+pub const CSV_COLUMN_INDEX_QUERY: usize = 2;
+pub const CSV_COLUMN_INDEX_URL: usize = 3;
+pub const CSV_COLUMN_INDEX_HITS: usize = 4;
+pub const CSV_COLUMN_INDEX_USER: usize = 5;
+pub const CSV_COLUMN_INDEX_EMAIL: usize = 6;
+pub const CSV_COLUMN_INDEX_TEMP_ID: usize = 7;
+pub const CSV_COLUMN_INDEX_TARGET: usize = 8;
+pub const CSV_COLUMN_INDEX_IP: usize = 9;
+
 /// Defaults
 
 /// Used internally after a KW has been treated by the program

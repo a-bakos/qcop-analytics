@@ -17,15 +17,19 @@ pub fn parse_csv_into_collection(
     file_path: &str,
     collection: &mut records::RecordCollection,
 ) -> Result<(), Box<dyn Error>> {
-    println!("CSV to parse: {file_path}");
-    println!("Parsing CSV...");
+    println!("[Config] CSV to parse: {file_path}");
+    if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES {
+        println!("[Config] Excluding logged in user searches\n");
+    }
+
     let mut reader = Reader::from_path(file_path)?;
     let mut skipped_items: u32 = 0;
+
     for row in reader.records() {
         let query_row: StringRecord = row?;
 
-        // Check if we need to skip known-user searches
-        if let Some(user) = query_row.get(5) {
+        // Check if we need to skip logged-in user searches
+        if let Some(user) = query_row.get(consts::CSV_COLUMN_INDEX_USER) {
             if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES && !user.is_empty() {
                 skipped_items += 1;
                 continue;
@@ -33,7 +37,7 @@ pub fn parse_csv_into_collection(
         };
 
         // Check keyword length validity (bounds check)
-        let keyword: String = match query_row.get(2) {
+        let keyword: String = match query_row.get(consts::CSV_COLUMN_INDEX_QUERY) {
             Some(keyword) => {
                 // Skip, if length not valid
                 if !data_processor::is_valid_length(keyword) {
@@ -42,7 +46,7 @@ pub fn parse_csv_into_collection(
                     continue;
                 }
 
-                let processed_kw = data_processor::keyword(keyword);
+                let processed_kw = data_processor::clean_keyword(keyword);
                 data_processor::handle_if_meaningful(processed_kw.as_str(), collection);
 
                 // Skip, if keyword is invalid
@@ -56,19 +60,19 @@ pub fn parse_csv_into_collection(
             None => data_processor::default(),
         };
 
-        let date_time: String = match query_row.get(1) {
+        let date_time: String = match query_row.get(consts::CSV_COLUMN_INDEX_DATETIME) {
             Some(datetime) => data_processor::datetime(datetime),
             None => data_processor::default(),
         };
-        let source: String = match query_row.get(3) {
+        let source: String = match query_row.get(consts::CSV_COLUMN_INDEX_URL) {
             Some(source) => data_processor::source_url(source),
             None => data_processor::default(),
         };
-        let hits: i32 = match query_row.get(4) {
+        let hits: i32 = match query_row.get(consts::CSV_COLUMN_INDEX_HITS) {
             Some(hits) => data_processor::hits(hits),
             None => consts::DEFAULT_MISSING_HITS,
         };
-        let target: String = match query_row.get(8) {
+        let target: String = match query_row.get(consts::CSV_COLUMN_INDEX_TARGET) {
             Some(target) => data_processor::target_url(target),
             None => data_processor::default(),
         };
@@ -76,6 +80,7 @@ pub fn parse_csv_into_collection(
         let clean_record = records::CleanRecord::new(date_time, keyword, source, hits, target);
         collection.add(clean_record);
     }
+
     println!("Parsing finished.");
     println!("Skipped items: {skipped_items:?}");
     println!("Collection length: {:?}", collection.map.len());
