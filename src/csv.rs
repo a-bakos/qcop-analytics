@@ -13,7 +13,7 @@ pub enum CSV_TYPE {
     OrderByTarget,
 }
 
-pub fn parse_csv(
+pub fn parse_csv_into_collection(
     file_path: &str,
     collection: &mut records::RecordCollection,
 ) -> Result<(), Box<dyn Error>> {
