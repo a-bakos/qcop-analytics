@@ -11,12 +11,14 @@ pub enum STAT_TYPE {
 #[derive(Debug)]
 pub struct RecordCollection {
     /// map meaning: [keyword, (count, metadata)]
-    pub map: BTreeMap<String, CleanRecordContainer>, // BTrees are inherently ordered by their keys
+    pub map: BTreeMap<String, CleanRecordContainer>,
+    // BTrees are inherently ordered by their keys
     stats: HashMap<String, u32>,
 
     pub map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
     pub map_by_target: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>, // count<target, kw_meta>
-                                                                          // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>, // count<source, kw_meta>
+
+    // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>, // count<source, kw_meta>
 }
 
 impl RecordCollection {
