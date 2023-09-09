@@ -61,7 +61,7 @@ fn handle_if_search_is_doi(keyword: &str, collection: &mut records::RecordCollec
             let re = Regex::new(r"(?i)10.\d{4}").unwrap();
             if re.is_match(keyword) {
                 //println!("Found DOI search! {:#?}", keyword);
-                collection.add_to_stats(records::STAT_TYPE::DOI);
+                collection.add_to_stats(records::StatType::DOI);
                 return true;
             }
             false

@@ -1,46 +1,95 @@
 use crate::consts;
 use std::collections::{BTreeMap, HashMap};
 
-// These variants used to specify the search's type for statistics
-#[allow(clippy::upper_case_acronyms, non_camel_case_types)]
-pub enum STAT_TYPE {
+// The search's type for statistics
+pub enum StatType {
     DOI,
     InvalidSearch,
 }
 
+// The final collection's type
+pub enum CollectionType {
+    Main,
+    OrderByCount,
+    OrderByTarget,
+}
+
+// A cleaned/processed search entry with metadata
+#[derive(Debug, Clone)]
+pub struct CleanRecord {
+    pub date_time: String,
+    pub keyword: String,
+    pub source: String,
+    pub hits: i32,
+    pub target: String,
+}
+
+impl CleanRecord {
+    pub fn new(
+        date_time: String,
+        keyword: String,
+        source: String,
+        hits: i32,
+        target: String,
+    ) -> Self {
+        Self {
+            date_time,
+            keyword,
+            source,
+            hits,
+            target,
+        }
+    }
+}
+
+/// A collection of cleaned/processed search entries with counter
+/// to store homogenous CleanRecord entries
+#[derive(Debug, Clone)]
+pub struct CleanRecordContainer {
+    pub counter: u32,
+    list: Vec<CleanRecord>,
+}
+
+impl CleanRecordContainer {
+    fn add_to_list(&mut self, record: CleanRecord) {
+        self.list.push(record);
+    }
+}
+
+// Final collection of clean records organized into sorted maps
 #[derive(Debug)]
 pub struct RecordCollection {
     /// map meaning: [keyword, (count, metadata)]
-    pub map: BTreeMap<String, CleanRecordContainer>,
     // BTrees are inherently ordered by their keys
-    stats: HashMap<String, u32>,
+    pub map: BTreeMap<String, CleanRecordContainer>,
 
+    // <count, <target, keyword_meta>>
     pub map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
-    pub map_by_target: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>, // count<target, kw_meta>
+    pub map_by_target: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>, // => <count<target, kw_meta>>
+    // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>, // => <count<source, kw_meta>>
 
-    // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>, // count<source, kw_meta>
+    stats: HashMap<String, u32>,
 }
 
 impl RecordCollection {
     pub fn new() -> Self {
         Self {
             map: BTreeMap::new(),
-            stats: HashMap::new(),
             map_by_counter: BTreeMap::new(),
             map_by_target: BTreeMap::new(),
+            stats: HashMap::new(),
         }
     }
 
+    /// Add item to main collection map
     pub fn add(&mut self, record: CleanRecord) {
         let keyword: String = record.keyword.clone();
 
-        // A-Z
         if self.map.get(&keyword).is_none() {
-            let clean_record_container = CleanRecordContainer {
+            self.map.insert(keyword, CleanRecordContainer {
                 counter: 1,
                 list: vec![record],
-            };
-            self.map.insert(keyword, clean_record_container);
+            });
         } else {
             let values = self.map.get_mut(&keyword).unwrap();
             values.counter += 1;
@@ -48,15 +97,15 @@ impl RecordCollection {
         }
     }
 
-    pub fn add_to_stats(&mut self, stat: STAT_TYPE) {
+    pub fn add_to_stats(&mut self, stat: StatType) {
         match stat {
-            STAT_TYPE::DOI => {
+            StatType::DOI => {
                 self.stats
                     .entry(consts::STAT_DOI.to_string())
                     .and_modify(|count| *count += 1)
                     .or_insert(1);
             }
-            STAT_TYPE::InvalidSearch => {
+            StatType::InvalidSearch => {
                 self.stats
                     .entry(consts::STAT_INVALID.to_string())
                     .and_modify(|count| *count += 1)
@@ -68,14 +117,13 @@ impl RecordCollection {
     pub fn sort_by_counter(&mut self) {
         for entry in self.map.iter_mut() {
             let the_keyword: &String = entry.0;
-            let kw_meta: CleanRecordContainer = entry.1.clone();
-            let counter: u32 = entry.1.counter;
-            let cleanrecord_container: Vec<CleanRecord> = kw_meta.list;
+            let keyword_meta: CleanRecordContainer = entry.1.clone();
+            let counter: u32 = entry.1.counter.clone();
+            let keyword_meta_list: Vec<CleanRecord> = keyword_meta.list;
 
             // step 1
-            // if counter is not in self.map_by_counter
-            // then add it in as key
-            // and add keyword as value IN a new vec of CleanRecordContainer-like list holding CleanRecord's
+            // if counter is not in self.map_by_counter then add it in as the key
+            // and add the search keyword as the value IN a new vec of CleanRecordContainer-like list holding CleanRecords
             // think: references to CleanRecords would work? referencing the items in self.map.list
             // cannot use CleanRecordContainer because we need a simpler struct (ie no counter field in here)
 
@@ -85,25 +133,25 @@ impl RecordCollection {
             // counter: [ "keyword" => Vec<CleanRecord> ]
 
             if self.map_by_counter.get(&counter).is_none() {
-                let mut btreeinner: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
-                btreeinner.insert(the_keyword.clone(), cleanrecord_container);
-                self.map_by_counter.insert(counter, btreeinner);
+                let mut keyword_and_meta_holder: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
+                keyword_and_meta_holder.insert(the_keyword.clone(), keyword_meta_list);
+                self.map_by_counter.insert(counter, keyword_and_meta_holder);
             } else {
-                // key (aka counter) exists, expand the vec
+                // The "key" (aka the counter) exists, expand the vec
                 let entry = self.map_by_counter.get_mut(&counter).unwrap();
-                for cleanrecord in cleanrecord_container.iter() {
-                    let newrecord: CleanRecord = CleanRecord {
-                        date_time: cleanrecord.date_time.clone(),
-                        keyword: cleanrecord.keyword.clone(),
-                        source: cleanrecord.source.clone(),
-                        hits: cleanrecord.hits,
-                        target: cleanrecord.target.clone(),
+
+                for keyword_meta_entry in keyword_meta_list.iter() {
+                    let new_keyword_meta_entry = CleanRecord {
+                        date_time: keyword_meta_entry.date_time.clone(),
+                        keyword: keyword_meta_entry.keyword.clone(),
+                        source: keyword_meta_entry.source.clone(),
+                        hits: keyword_meta_entry.hits.clone(),
+                        target: keyword_meta_entry.target.clone(),
                     };
-                    entry.insert(the_keyword.clone(), vec![newrecord]);
+                    entry.insert(the_keyword.clone(), vec![new_keyword_meta_entry]);
                 }
             }
         }
-        //println!("{:#?}", self.map_by_counter);
     }
 
     pub fn sort_by_target(&mut self) {
@@ -125,7 +173,7 @@ impl RecordCollection {
                         date_time: record.date_time.clone(),
                         keyword: record.keyword.clone(),
                         source: record.source.clone(),
-                        hits: record.hits,
+                        hits: record.hits.clone(),
                         target: record.target.clone(),
                     };
                     innerbtree.insert(target.clone(), vec![rerecord]);
@@ -201,50 +249,4 @@ impl RecordCollection {
     pub fn show_stats(&self) {
         println!("{:#?}", self.stats);
     }
-}
-
-#[derive(Debug, Clone)]
-pub struct CleanRecordContainer {
-    pub counter: u32,
-    list: Vec<CleanRecord>,
-}
-
-impl CleanRecordContainer {
-    fn add_to_list(&mut self, record: CleanRecord) {
-        self.list.push(record);
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct CleanRecord {
-    pub date_time: String,
-    pub keyword: String,
-    pub source: String,
-    pub hits: i32,
-    pub target: String,
-}
-
-impl CleanRecord {
-    pub fn new(
-        date_time: String,
-        keyword: String,
-        source: String,
-        hits: i32,
-        target: String,
-    ) -> Self {
-        Self {
-            date_time,
-            keyword,
-            source,
-            hits,
-            target,
-        }
-    }
-}
-
-#[allow(non_camel_case_types)]
-pub enum CollectionType {
-    Main,
-    OrderByCount,
-    OrderByTarget,
 }

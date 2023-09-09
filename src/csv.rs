@@ -32,7 +32,7 @@ pub fn parse_csv_into_collection(
             Some(keyword) => {
                 // Skip, if length not valid
                 if !data_processor::is_valid_length(keyword) {
-                    collection.add_to_stats(records::STAT_TYPE::InvalidSearch);
+                    collection.add_to_stats(records::StatType::InvalidSearch);
                     skipped_items += 1;
                     continue;
                 }
@@ -42,7 +42,7 @@ pub fn parse_csv_into_collection(
 
                 // Skip, if keyword is invalid
                 if processed_kw == consts::DEFAULT_KEYWORD_INVALID {
-                    collection.add_to_stats(records::STAT_TYPE::InvalidSearch);
+                    collection.add_to_stats(records::StatType::InvalidSearch);
                     skipped_items += 1;
                     continue;
                 }
