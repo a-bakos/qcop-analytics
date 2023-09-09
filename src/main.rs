@@ -1,5 +1,6 @@
 mod consts;
 mod csv;
+mod intelligence;
 mod data_processor;
 mod records;
 mod search_query;
@@ -17,9 +18,6 @@ fn main() {
     let mut collection: RecordCollection = RecordCollection::new();
     let _parse = parse_csv_into_collection(consts::CSV_INPUT_FILE_NAME, &mut collection);
 
-    //println!("{:#?}", collection);
-    //collection.show_stats();
-
     let _write_csv_main = write_to_csv(
         consts::CSV_OUTPUT_FILE_NAME,
         &collection,
@@ -33,6 +31,7 @@ fn main() {
         &collection,
         records::CollectionType::OrderByCount,
     );
+    println!("{:#?}", collection.map_by_counter);
 
     // todo
     /*println!("\nSorting by target...");
