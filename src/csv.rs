@@ -1,11 +1,13 @@
 extern crate csv;
 
-use crate::consts;
-use crate::data_processor;
-use crate::records;
 use csv::{Reader, StringRecord, WriterBuilder};
 use std::error::Error;
-use crate::records::CollectionType;
+use crate::{
+    consts,
+    data_processor,
+    records,
+    records::CollectionType,
+};
 
 pub fn parse_csv_into_collection(
     file_path: &str,

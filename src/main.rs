@@ -3,10 +3,11 @@ mod csv;
 mod intelligence;
 mod data_processor;
 mod records;
-mod search_query;
 
-use crate::csv::{parse_csv_into_collection, write_to_csv};
-use crate::records::RecordCollection;
+use crate::{
+    csv::{parse_csv_into_collection, write_to_csv},
+    records::RecordCollection,
+};
 
 fn main() {
     // Some configuration parameters
