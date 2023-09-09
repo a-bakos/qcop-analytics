@@ -65,7 +65,7 @@ pub struct RecordCollection {
 
     // <count, <target, keyword_meta>>
     pub map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
-    pub map_by_target: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>, // => <count<target, kw_meta>>
+    pub map_by_target: BTreeMap<String, Vec<CleanRecord>>, // => <count<target, kw_meta>>
     // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>, // => <count<source, kw_meta>>
 
     stats: HashMap<String, u32>,
@@ -121,17 +121,6 @@ impl RecordCollection {
             let counter: u32 = entry.1.counter.clone();
             let keyword_meta_list: Vec<CleanRecord> = keyword_meta.list;
 
-            // step 1
-            // if counter is not in self.map_by_counter then add it in as the key
-            // and add the search keyword as the value IN a new vec of CleanRecordContainer-like list holding CleanRecords
-            // think: references to CleanRecords would work? referencing the items in self.map.list
-            // cannot use CleanRecordContainer because we need a simpler struct (ie no counter field in here)
-
-            // step 2
-            // think about further grouping options
-            // the vec may need to change to a hashmap or btreemap, so:
-            // counter: [ "keyword" => Vec<CleanRecord> ]
-
             if self.map_by_counter.get(&counter).is_none() {
                 let mut keyword_and_meta_holder: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
                 keyword_and_meta_holder.insert(the_keyword.clone(), keyword_meta_list);
@@ -155,94 +144,45 @@ impl RecordCollection {
     }
 
     pub fn sort_by_target(&mut self) {
-        //  BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
-        let mut innerbtree: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
+        //  BTreeMap<String(target_url), Vec<CleanRecord>>
+        let mut target_holder: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
 
         // Loop through main map
-        for (_kw, kw_meta) in self.map.iter_mut() {
-            // BTreeMap<String, CleanRecordContainer>
-            // Loop meta
-            let cleanrecords: Vec<CleanRecord> = kw_meta.list.clone();
-            // Then count target
-            for record in cleanrecords.iter() {
+        // BTreeMap<String, CleanRecordContainer<u32, Vec<CleanRecord>>>
+        for (_keyword_string, keyword_meta_collection) in self.map.iter_mut() {
+            let search_keywords: Vec<CleanRecord> = keyword_meta_collection.list.clone();
+
+            for record in search_keywords.iter() {
                 let target = record.target.clone();
-                // if target
-                if innerbtree.get(&target).is_none() {
-                    // add to
-                    let rerecord: CleanRecord = CleanRecord {
-                        date_time: record.date_time.clone(),
-                        keyword: record.keyword.clone(),
-                        source: record.source.clone(),
-                        hits: record.hits.clone(),
-                        target: record.target.clone(),
-                    };
-                    innerbtree.insert(target.clone(), vec![rerecord]);
-                } else {
-                    let mut item = innerbtree.get(&target).unwrap();
-                    // item.1
+
+                // We need to break up the target string at whitespaces because it's a list of target URLs
+                let split_targets = target.split_whitespace();
+                for target in split_targets {
+                    // If target doesn't exist as the "key", create it, otherwise expand collection
+                    if target_holder.get(target).is_none() {
+                        target_holder.insert(target.to_string(), vec![CleanRecord {
+                            date_time: record.date_time.clone(),
+                            keyword: record.keyword.clone(),
+                            source: record.source.clone(),
+                            hits: record.hits.clone(),
+                            target: record.target.clone(),
+                        }]);
+                    } else {
+                        // The "key" (aka the target url) exists, expand the vec
+                        let search_keywords_for_target = target_holder.get_mut(target).unwrap();
+                        search_keywords_for_target.push(CleanRecord {
+                            date_time: record.date_time.clone(),
+                            keyword: record.keyword.clone(),
+                            source: record.source.clone(),
+                            hits: record.hits.clone(),
+                            target: record.target.clone(),
+                        });
+                    }
                 }
             }
         }
-        println!("{:#?}", innerbtree);
 
-        //
-        // let mut target_holder: BTreeMap<String, u32> = BTreeMap::new();
-        // // Loop through main map
-        // for entry in self.map.iter_mut() {
-        //     // Extract meta
-        //     let kw_meta: CleanRecordContainer = entry.1.clone();
-        //     let cleanrecord_container: Vec<CleanRecord> = kw_meta.list;
-        //     // Then count target
-        //     for record in cleanrecord_container.iter() {
-        //         let target = record.target.clone();
-        //         target_holder
-        //             .entry(target)
-        //             .and_modify(|count| *count += 1)
-        //             .or_insert(1);
-        //     }
-        //
-        //     for (target_link, counter) in target_holder.iter() {
-        //         if self.map_by_target.get(&counter).is_none() {
-        //             let mut btreeinner: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
-        //             btreeinner.insert(target_link.clone(), cleanrecord_container.clone());
-        //             self.map_by_counter.insert(counter.clone(), btreeinner);
-        //         } else {
-        //             // key (aka counter) exists, expand the vec
-        //             let entry = self.map_by_target.get_mut(&counter).unwrap();
-        //
-        //             for cleanrecord in cleanrecord_container.iter() {
-        //                 let newrecord: CleanRecord = CleanRecord {
-        //                     date_time: cleanrecord.date_time.clone(),
-        //                     keyword: cleanrecord.keyword.clone(),
-        //                     source: cleanrecord.source.clone(),
-        //                     hits: cleanrecord.hits,
-        //                     target: cleanrecord.target.clone(),
-        //                 };
-        //                 entry.insert(cleanrecord.target.clone(), vec![newrecord]);
-        //             }
-        //         }
-        //     }
-
-        /*
-        if self.map_by_counter.get(&counter).is_none() {
-            let mut btreeinner: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
-            btreeinner.insert(the_keyword.clone(), cleanrecord_container);
-            self.map_by_counter.insert(counter, btreeinner);
-        } else {
-            // key (aka counter) exists, expand the vec
-            let entry = self.map_by_counter.get_mut(&counter).unwrap();
-            for cleanrecord in cleanrecord_container.iter() {
-                let newrecord: CleanRecord = CleanRecord {
-                    date_time: cleanrecord.date_time.clone(),
-                    keyword: cleanrecord.keyword.clone(),
-                    source: cleanrecord.source.clone(),
-                    hits: cleanrecord.hits,
-                    target: cleanrecord.target.clone(),
-                };
-                entry.insert(the_keyword.clone(), vec![newrecord]);
-            }
-        }*/
-        //}
+        self.map_by_target = target_holder;
     }
 
     // TODO better formatting

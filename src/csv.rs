@@ -1,5 +1,6 @@
 extern crate csv;
 
+use std::collections::BTreeMap;
 use csv::{Reader, StringRecord, WriterBuilder};
 use std::error::Error;
 use crate::{
@@ -8,6 +9,7 @@ use crate::{
     records,
     records::CollectionType,
 };
+use crate::records::CleanRecord;
 
 pub fn parse_csv_into_collection(
     file_path: &str,
@@ -116,8 +118,9 @@ pub fn write_to_csv(
         }
         CollectionType::OrderByTarget => {
             let collection = &collection.map_by_target;
-            // todo
-            for (target, count) in collection.iter() {}
+            for (target, target_meta) in collection.iter() {
+                wtr.write_record([target.clone(), target_meta.len().to_string()])?;
+            }
         }
     }
 

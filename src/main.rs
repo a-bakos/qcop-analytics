@@ -32,16 +32,14 @@ fn main() {
         &collection,
         records::CollectionType::OrderByCount,
     );
-    println!("{:#?}", collection.map_by_counter);
 
-    // todo
-    /*println!("\nSorting by target...");
+    println!("\nSorting by target...");
     collection.sort_by_target();
     let _write_csv_order_by_target = write_to_csv(
         consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET,
         &collection,
         records::CollectionType::OrderByTarget,
-    );*/
+    );
 
     println!("Finished.");
 }
