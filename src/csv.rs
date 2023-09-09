@@ -5,25 +5,16 @@ use crate::data_processor;
 use crate::records;
 use csv::{Reader, StringRecord, WriterBuilder};
 use std::error::Error;
-
-#[allow(non_camel_case_types)]
-pub enum CSV_TYPE {
-    Main,
-    OrderByCount,
-    OrderByTarget,
-}
+use crate::records::CollectionType;
 
 pub fn parse_csv_into_collection(
     file_path: &str,
     collection: &mut records::RecordCollection,
 ) -> Result<(), Box<dyn Error>> {
-    println!("[Config] CSV to parse: {file_path}");
-    if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES {
-        println!("[Config] Excluding logged in user searches\n");
-    }
-
     let mut reader = Reader::from_path(file_path)?;
     let mut skipped_items: u32 = 0;
+
+    println!("Parsing CSV into collection...");
 
     for row in reader.records() {
         let query_row: StringRecord = row?;
@@ -83,20 +74,20 @@ pub fn parse_csv_into_collection(
 
     println!("Parsing finished.");
     println!("Skipped items: {skipped_items:?}");
-    println!("Collection length: {:?}", collection.map.len());
+    println!("Collection length: {:?}\n", collection.map.len());
     Ok(())
 }
 
 pub fn write_to_csv(
     file_path: &str,
     collection: &records::RecordCollection,
-    csv_type: CSV_TYPE,
+    collection_type: CollectionType,
 ) -> Result<(), Box<dyn Error>> {
-    println!("Writing results into CSV...");
+    println!("Writing results into CSV: {}", file_path);
     let mut wtr = WriterBuilder::new().from_path(file_path)?;
 
-    match csv_type {
-        CSV_TYPE::Main => {
+    match collection_type {
+        CollectionType::Main => {
             let collection = &collection.map;
             for (key, val) in collection.iter() {
                 let keyword = key;
@@ -104,13 +95,13 @@ pub fn write_to_csv(
                 wtr.write_record([keyword, count.as_str()])?;
             }
         }
-        CSV_TYPE::OrderByCount => {
+        CollectionType::OrderByCount => {
             let collection = &collection.map_by_counter;
             for (count, keyword_collection) in collection.iter() {
                 // get every keyword and get the corresponding counter and print count -> kw
                 for kw_entry in keyword_collection.iter() {
                     // Store current keyword and skip on duplicates if found
-                    let mut current_keyword: &String = &"".to_string(); // temp kw init
+                    let mut current_keyword: &String = &"".to_string(); // temp keyword init
                     for record in kw_entry.1.iter() {
                         if current_keyword == &record.keyword {
                             continue;
@@ -121,8 +112,9 @@ pub fn write_to_csv(
                 }
             }
         }
-        CSV_TYPE::OrderByTarget => {
+        CollectionType::OrderByTarget => {
             let collection = &collection.map_by_target;
+            // todo
             for (target, count) in collection.iter() {}
         }
     }

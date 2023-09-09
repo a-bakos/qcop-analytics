@@ -241,3 +241,10 @@ impl CleanRecord {
         }
     }
 }
+
+#[allow(non_camel_case_types)]
+pub enum CollectionType {
+    Main,
+    OrderByCount,
+    OrderByTarget,
+}
