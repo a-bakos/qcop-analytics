@@ -118,17 +118,7 @@ pub fn write_to_csv(
         }
         CSV_TYPE::OrderByTarget => {
             let collection = &collection.map_by_target;
-            for (count, keyword_collection) in collection.iter() {
-                /*
-                // get every keyword and get the corresponding counter and print count -> kw
-                for kw_entry in keyword_collection.iter() {
-                    // Store current keyword and skip on duplicates if found
-                    let mut target: &String = &"".to_string(); // temp kw init
-                    dbg!(&target);
-                    wtr.write_record([count.to_string(), target.to_string()])?;
-                }*/
-                todo!();
-            }
+            for (target, count) in collection.iter() {}
         }
     }
 

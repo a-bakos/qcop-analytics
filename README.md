@@ -4,15 +4,15 @@
     - keyword search
     - pull up statistics for a selected keyword
     - data cleaning
-      - **[done]** exclude data points / columns
-      - **[wip]** get rid of bot searches, hacking attempts
-          - **[wip]** sql-like commands
-          - **[done]** {search_term_string}
-      - **[done]** string cutoff at length X
-      - **[done]** exclude logged in user searches
-      - **[done]** decode urls
-      - **[done]** "+" character in "keyword" translates to whitespace
-    - **[wip]** produce fresh datasheet for cleaned data
+      - [done] exclude data points / columns
+      - [wip] get rid of bot searches, hacking attempts
+          - [wip] sql-like commands
+          - [done] {search_term_string}
+      - [done] string cutoff at length X
+      - [done] exclude logged in user searches
+      - [done] decode urls
+      - [done] "+" character in "keyword" translates to whitespace
+    - [wip] produce fresh datasheet for cleaned data
 
 ## initial objectives
     - find most searched for keywords
