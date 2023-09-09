@@ -1,4 +1,4 @@
-# Need further filter for these
+****# Need further filter for these
 
 sleep(20.to_i),1
 #{31337*31337},1
@@ -228,13 +228,4 @@ testheaderxxx: testval1",9
 192.168.0.1,1
 192.168.1.1,1
 1;SELECT SLEEP(5)#,2
-1@169.254.169.254/latest/meta-data/,6
-
-
-
-
-;foo
-/home
-()
-printf
-TrackingId
+1@169.254.169.254/latest/meta-data/,6****
