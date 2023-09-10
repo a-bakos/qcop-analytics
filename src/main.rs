@@ -10,8 +10,11 @@ use crate::{
 };
 
 fn main() {
+    println!("\n[ QCop Intel - Search Insights ]\n");
+
     // Some configuration parameters
     println!("[Config] CSV to parse: {}", consts::CSV_INPUT_FILE_NAME);
+    println!("[Config] Keyword MIN / MAX length: {} / {}", consts::KEYWORD_MIN_LENGTH, consts::KEYWORD_MAX_LENGTH);
     if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES {
         println!("[Config] Excluding logged in user searches\n");
     }
@@ -41,5 +44,5 @@ fn main() {
         records::CollectionType::OrderByTarget,
     );
 
-    println!("Finished.");
+    println!("\n[ QCop finished. ]");
 }

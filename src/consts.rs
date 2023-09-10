@@ -10,6 +10,42 @@ pub const INVALID_KEYWORD_LIST: [&str; 1] = ["{search_term_string}"];
 
 pub const INVALID_KEYWORD_START_LIST: [&str; 6] = ["1/", "1*", "1\\", "1%", "1&", "1$"];
 
+// TODO - will be used for kw that we specifically look for
+pub const SPECIAL_KEYWORD_LIST: [&str; 0] = [];
+
+// DEV values
+pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv"; // "import/test.csv";
+
+pub const CSV_OUTPUT_FILE_NAME: &str = "export/collection.csv";
+
+// Ordered files
+pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_AZ: &str = "export/collection-order-by-az.csv";
+pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_COUNT: &str = "export/collection-order-by-count.csv";
+pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_SOURCE: &str = "export/collection-order-by-source.csv";
+pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET: &str = "export/collection-order-by-target.csv";
+
+pub const CSV_COLUMN_INDEX_ID: usize = 0;
+pub const CSV_COLUMN_INDEX_DATETIME: usize = 1;
+pub const CSV_COLUMN_INDEX_QUERY: usize = 2;
+pub const CSV_COLUMN_INDEX_URL: usize = 3;
+pub const CSV_COLUMN_INDEX_HITS: usize = 4;
+pub const CSV_COLUMN_INDEX_USER: usize = 5;
+pub const CSV_COLUMN_INDEX_EMAIL: usize = 6;
+pub const CSV_COLUMN_INDEX_TEMP_ID: usize = 7;
+pub const CSV_COLUMN_INDEX_TARGET: usize = 8;
+pub const CSV_COLUMN_INDEX_IP: usize = 9;
+
+/// Defaults
+
+/// Used internally after a KW has been treated by the program
+pub const DEFAULT_KEYWORD_INVALID: &str = "{invalid_keyword}";
+
+pub const DEFAULT_MISSING_HITS: i32 = -1; // could be i16
+
+/// Stat type variations - may need different format later
+pub const STAT_DOI: &str = "doi";
+pub const STAT_INVALID: &str = "invalid";
+
 /// Define characters and keywords here that would make a search entry tainted
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
@@ -105,39 +141,3 @@ pub const TAINTED_SEARCHES: [&str; 89] = [
     ".com",
     "zw5",
 ];
-
-// TODO - will be used for kw that we specifically look for
-pub const SPECIAL_KEYWORD_LIST: [&str; 0] = [];
-
-// DEV values
-pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv"; // "import/test.csv";
-
-pub const CSV_OUTPUT_FILE_NAME: &str = "export/collection.csv";
-
-// Ordered files
-pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_AZ: &str = "export/collection-order-by-az.csv";
-pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_COUNT: &str = "export/collection-order-by-count.csv";
-pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_SOURCE: &str = "export/collection-order-by-source.csv";
-pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET: &str = "export/collection-order-by-target.csv";
-
-pub const CSV_COLUMN_INDEX_ID: usize = 0;
-pub const CSV_COLUMN_INDEX_DATETIME: usize = 1;
-pub const CSV_COLUMN_INDEX_QUERY: usize = 2;
-pub const CSV_COLUMN_INDEX_URL: usize = 3;
-pub const CSV_COLUMN_INDEX_HITS: usize = 4;
-pub const CSV_COLUMN_INDEX_USER: usize = 5;
-pub const CSV_COLUMN_INDEX_EMAIL: usize = 6;
-pub const CSV_COLUMN_INDEX_TEMP_ID: usize = 7;
-pub const CSV_COLUMN_INDEX_TARGET: usize = 8;
-pub const CSV_COLUMN_INDEX_IP: usize = 9;
-
-/// Defaults
-
-/// Used internally after a KW has been treated by the program
-pub const DEFAULT_KEYWORD_INVALID: &str = "{invalid_keyword}";
-
-pub const DEFAULT_MISSING_HITS: i32 = -1; // could be i16
-
-/// Stat type variations - may need different format later
-pub const STAT_DOI: &str = "doi";
-pub const STAT_INVALID: &str = "invalid";
