@@ -68,6 +68,9 @@ pub struct RecordCollection {
     pub map_by_target: BTreeMap<String, Vec<CleanRecord>>, // => <count<target, kw_meta>>
     // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>, // => <count<source, kw_meta>>
 
+    pub top_keywords: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
+    pub top_targets: BTreeMap<String, Vec<CleanRecord>>,
+
     stats: HashMap<String, u32>,
 }
 
@@ -77,7 +80,10 @@ impl RecordCollection {
             map: BTreeMap::new(),
             map_by_counter: BTreeMap::new(),
             map_by_target: BTreeMap::new(),
+            top_keywords: BTreeMap::new(),
+            top_targets: BTreeMap::new(),
             stats: HashMap::new(),
+
         }
     }
 
