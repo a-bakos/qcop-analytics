@@ -3,6 +3,8 @@ pub const KEYWORD_MAX_LENGTH: usize = 100;
 pub const KEYWORD_MIN_LENGTH: usize = 3;
 pub const EXCLUDE_LOGGED_IN_USER_SEARCHES: bool = true;
 pub const STORE_INVALID_ITEMS: bool = true;
+pub const NUMBER_OF_TOP_TARGETS: usize = 10;
+pub const NUMBER_OF_TOP_KEYWORDS: usize = 10;
 
 /// Invalid KW means when a search happened but the keyword couldn't be
 /// recorded for some reason.
