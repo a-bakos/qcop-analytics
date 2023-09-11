@@ -44,5 +44,9 @@ fn main() {
         records::CollectionType::OrderByTarget,
     );
 
+    println!("\nFinding top keywords...");
+    collection.find_top_keywords();
+
+
     println!("\n[ QCop finished. ]");
 }

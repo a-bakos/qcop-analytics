@@ -3,8 +3,8 @@ pub const KEYWORD_MAX_LENGTH: usize = 100;
 pub const KEYWORD_MIN_LENGTH: usize = 3;
 pub const EXCLUDE_LOGGED_IN_USER_SEARCHES: bool = true;
 pub const STORE_INVALID_ITEMS: bool = true;
-pub const NUMBER_OF_TOP_TARGETS: usize = 10;
 pub const NUMBER_OF_TOP_KEYWORDS: usize = 10;
+pub const NUMBER_OF_TOP_TARGETS: usize = 10;
 
 /// Invalid KW means when a search happened but the keyword couldn't be
 /// recorded for some reason.
@@ -16,7 +16,7 @@ pub const INVALID_KEYWORD_START_LIST: [&str; 6] = ["1/", "1*", "1\\", "1%", "1&"
 pub const SPECIAL_KEYWORD_LIST: [&str; 0] = [];
 
 // DEV values
-pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv"; // "import/test.csv";
+pub const CSV_INPUT_FILE_NAME: &str = "import/test.csv"; // "import/as-wp_q_cop.csv";
 
 pub const CSV_OUTPUT_FILE_NAME: &str = "export/collection.csv";
 
