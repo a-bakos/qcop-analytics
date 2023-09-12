@@ -12,12 +12,15 @@ use crate::{
 fn main() {
     println!("\n[ QCop Intel - Search Insights ]\n");
 
-    // Some configuration parameters
+    // Configuration parameter notices
     println!("[Config] CSV to parse: {}", consts::CSV_INPUT_FILE_NAME);
     println!("[Config] Keyword MIN / MAX length: {} / {}", consts::KEYWORD_MIN_LENGTH, consts::KEYWORD_MAX_LENGTH);
     if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES {
-        println!("[Config] Excluding logged in user searches\n");
+        println!("[Config] Excluding logged in user searches");
     }
+    println!("[Config] Number of top keywords: {}", consts::NUMBER_OF_TOP_KEYWORDS);
+    println!("[Config] Number of top targets: {}", consts::NUMBER_OF_TOP_TARGETS);
+    println!("\n");
 
     let mut collection: RecordCollection = RecordCollection::new();
     let _parse = parse_csv_into_collection(consts::CSV_INPUT_FILE_NAME, &mut collection);
@@ -46,6 +49,11 @@ fn main() {
 
     println!("\nFinding top keywords...");
     collection.find_top_keywords();
+    let _write_csv_top_keywords = write_to_csv(
+        consts::CSV_OUTPUT_FILE_NAME_TOP_KEYWORDS,
+        &collection,
+        records::CollectionType::TopKeywords,
+    );
 
     // todo
     // println!("\nFinding top targets...");
@@ -53,3 +61,5 @@ fn main() {
 
     println!("\n[ QCop finished. ]");
 }
+
+

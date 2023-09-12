@@ -122,6 +122,14 @@ pub fn write_to_csv(
                 wtr.write_record([target.clone(), target_meta.len().to_string()])?;
             }
         }
+        CollectionType::TopKeywords => {
+            let collection = &collection.top_keywords;
+            for (count, keyword_meta) in collection.iter().rev() {
+                for (keyword, _keyword_meta) in keyword_meta.iter() {
+                    wtr.write_record([keyword.clone(), count.clone().to_string()])?;
+                }
+            }
+        }
     }
 
     wtr.flush()?;

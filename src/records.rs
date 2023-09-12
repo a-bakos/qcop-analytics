@@ -12,6 +12,7 @@ pub enum CollectionType {
     Main,
     OrderByCount,
     OrderByTarget,
+    TopKeywords,
 }
 
 // A cleaned/processed search entry with metadata

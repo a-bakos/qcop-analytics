@@ -3,7 +3,7 @@ pub const KEYWORD_MAX_LENGTH: usize = 100;
 pub const KEYWORD_MIN_LENGTH: usize = 3;
 pub const EXCLUDE_LOGGED_IN_USER_SEARCHES: bool = true;
 pub const STORE_INVALID_ITEMS: bool = true;
-pub const NUMBER_OF_TOP_KEYWORDS: usize = 10;
+pub const NUMBER_OF_TOP_KEYWORDS: usize = 50;
 pub const NUMBER_OF_TOP_TARGETS: usize = 10;
 
 /// Invalid KW means when a search happened but the keyword couldn't be
@@ -16,8 +16,8 @@ pub const INVALID_KEYWORD_START_LIST: [&str; 6] = ["1/", "1*", "1\\", "1%", "1&"
 pub const SPECIAL_KEYWORD_LIST: [&str; 0] = [];
 
 // DEV values
-pub const CSV_INPUT_FILE_NAME: &str = "import/test.csv";
-// pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv";
+// pub const CSV_INPUT_FILE_NAME: &str = "import/test.csv";
+pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv";
 
 pub const CSV_OUTPUT_FILE_NAME: &str = "export/collection.csv";
 
@@ -26,6 +26,7 @@ pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_AZ: &str = "export/collection-order-by-a
 pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_COUNT: &str = "export/collection-order-by-count.csv";
 pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_SOURCE: &str = "export/collection-order-by-source.csv";
 pub const CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET: &str = "export/collection-order-by-target.csv";
+pub const CSV_OUTPUT_FILE_NAME_TOP_KEYWORDS: &str = "export/collection-top-keywords.csv";
 
 pub const CSV_COLUMN_INDEX_ID: usize = 0;
 pub const CSV_COLUMN_INDEX_DATETIME: usize = 1;
