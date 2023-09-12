@@ -66,8 +66,10 @@ pub struct RecordCollection {
 
     // <count, <target, keyword_meta>>
     pub map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
-    pub map_by_target: BTreeMap<String, Vec<CleanRecord>>, // => <count<target, kw_meta>>
-    // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>, // => <count<source, kw_meta>>
+    // <count<target, kw_meta>>
+    pub map_by_target: BTreeMap<String, Vec<CleanRecord>>,
+    // <count<source, kw_meta>>
+    // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>,
 
     pub top_keywords: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
     pub top_targets: BTreeMap<String, Vec<CleanRecord>>,
@@ -200,7 +202,7 @@ impl RecordCollection {
     fn find_top_counts(&self, map_type: MapType) -> Vec<&u32> {
         let mut top_counts = Vec::new();
 
-        let map = match map_type {
+        match map_type {
             MapType::Counter => {
                 for (item_count, item_meta) in self.map_by_counter.iter() {
                     if top_counts.len() < consts::NUMBER_OF_TOP_KEYWORDS {

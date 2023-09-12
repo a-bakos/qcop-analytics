@@ -145,3 +145,11 @@ pub const TAINTED_SEARCHES: [&str; 89] = [
     ".com",
     "zw5",
 ];
+
+pub const TAINTED_TARGETS: [&str; 5] = [
+    "cdn-cgi",
+    "admin-ajax",
+    "jAvasCriPt%",
+    ".text-center",
+    "class=",
+];
