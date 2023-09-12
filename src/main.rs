@@ -1,7 +1,7 @@
 mod consts;
 mod csv;
 mod intelligence;
-mod data_processor;
+mod data_filters;
 mod records;
 
 use crate::{
@@ -35,15 +35,15 @@ fn main() {
         &collection,
         records::CollectionType::OrderByCount,
     );
-
-    println!("\nSorting by target...");
-    collection.sort_by_target();
-    let _write_csv_order_by_target = write_to_csv(
-        consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET,
-        &collection,
-        records::CollectionType::OrderByTarget,
-    );
-
+    /*
+        println!("\nSorting by target...");
+        collection.sort_by_target();
+        let _write_csv_order_by_target = write_to_csv(
+            consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET,
+            &collection,
+            records::CollectionType::OrderByTarget,
+        );
+    */
     println!("\nFinding top keywords...");
     collection.find_top_keywords();
 
