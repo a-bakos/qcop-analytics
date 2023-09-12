@@ -23,7 +23,7 @@ Imagine you have a CSV that looks like this:
 But instead of 4 rows of data, you have hundreds of thousands, perhaps millions. All of that information will be looked
 at, filtered, sorted, stored, and output in new collections.
 
-Not all of those columns of data are useful for insight generation, so we need the following five:
+Not all of those columns of data are useful for insight generation though, so we need the following five:
 `"time","query","url","hits","target"`
 
 ## High level overview

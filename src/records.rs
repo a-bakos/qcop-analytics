@@ -223,58 +223,23 @@ impl RecordCollection {
     }
 
     pub fn find_top_keywords(&mut self) {
-        // <count, <target, keyword_meta>>
-        // map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
-
-        let top_counts = self.find_top_counts(MapType::Counter);
-
-        println!("top counts");
-        print!("{:?}", top_counts);
-
-        // todo! now get items from BTreeMap: key = top_count  
-
-
-        /*
-                    // if same count add to its local collection
-                    if self.top_keywords.contains_key(item_count) {
-                        let existing_item = self.top_keywords.get_mut(item_count).unwrap();
-                        for (key, value) in item_meta.iter() {
-                            existing_item.insert(key.clone(), value.clone());
-                        }
-                    } else {
-                        // if len is not MAX, add to collection
-                        // otherwise find smallest count and replace
-                        if self.top_keywords.len() < consts::NUMBER_OF_TOP_KEYWORDS {
-                            self.top_keywords.insert(item_count.clone(), item_meta.clone());
-                        } else {
-                            let mut remove_count = &0;
-                            let mut item_meta = BTreeMap::new();
-                            'inner: for (current_item_count, meta) in self.top_keywords.iter_mut() {
-                                if current_item_count < item_count {
-                                    remove_count = item_count;
-                                    item_meta = meta.clone();
-                                    break 'inner;
-                                }
-                            }
-                            self.top_keywords.remove(remove_count);
-                            self.top_keywords.insert(item_count.clone(), item_meta);
-                        }
-                    }
-                }
-
-                println!("{:#?}", self.top_keywords);
-
-
-                // BTreeMap<u32, Vec<CleanRecord>>,
-                // consts::NUMBER_OF_TOP_KEYWORDS*/
+        let top_keywords: Vec<_> = self.map_by_counter.iter().rev().take(consts::NUMBER_OF_TOP_KEYWORDS).clone().collect();
+        let mut top_keywords_container: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>> = BTreeMap::new();
+        for item_tuple in top_keywords.iter() {
+            top_keywords_container.insert(item_tuple.0.clone(), item_tuple.1.clone());
+        }
+        self.top_keywords = top_keywords_container;
     }
 
-    pub fn find_top_targets(&self) {
-        // map_by_target: BTreeMap<String, Vec<CleanRecord>>, // => <count<target, kw_meta>>
-
-        // BTreeMap<String, Vec<CleanRecord>>,
-        // consts::NUMBER_OF_TOP_TARGETS
-        // self.top_targets
+    // TODO!
+    pub fn find_top_targets(&mut self) {
+        let top_targets: Vec<_> = self.map_by_target.iter().rev().take(consts::NUMBER_OF_TOP_TARGETS).clone().collect();
+        // println!("{:#?}", self.top_targets);
+        let mut top_targets_container: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
+        for item_tuple in top_targets.iter() {
+            top_targets_container.insert(item_tuple.0.clone(), item_tuple.1.clone());
+        }
+        self.top_targets = top_targets_container;
     }
 
     // TODO better formatting

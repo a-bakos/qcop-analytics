@@ -35,18 +35,21 @@ fn main() {
         &collection,
         records::CollectionType::OrderByCount,
     );
-    /*
-        println!("\nSorting by target...");
-        collection.sort_by_target();
-        let _write_csv_order_by_target = write_to_csv(
-            consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET,
-            &collection,
-            records::CollectionType::OrderByTarget,
-        );
-    */
+
+    println!("\nSorting by target...");
+    collection.sort_by_target();
+    let _write_csv_order_by_target = write_to_csv(
+        consts::CSV_OUTPUT_FILE_NAME_ORDER_BY_TARGET,
+        &collection,
+        records::CollectionType::OrderByTarget,
+    );
+
     println!("\nFinding top keywords...");
     collection.find_top_keywords();
 
+    // todo
+    // println!("\nFinding top targets...");
+    // collection.find_top_targets();
 
     println!("\n[ QCop finished. ]");
 }

@@ -5,7 +5,7 @@ use csv::{Reader, StringRecord, WriterBuilder};
 use std::error::Error;
 use crate::{
     consts,
-    data_processor,
+    data_filters,
     records,
     records::CollectionType,
 };
@@ -35,14 +35,14 @@ pub fn parse_csv_into_collection(
         let keyword: String = match query_row.get(consts::CSV_COLUMN_INDEX_QUERY) {
             Some(keyword) => {
                 // Skip, if length not valid
-                if !data_processor::is_valid_length(keyword) {
+                if !data_filters::is_valid_length(keyword) {
                     collection.add_to_stats(records::StatType::InvalidSearch);
                     skipped_items += 1;
                     continue;
                 }
 
-                let processed_kw = data_processor::clean_keyword(keyword);
-                data_processor::handle_if_meaningful(processed_kw.as_str(), collection);
+                let processed_kw = data_filters::clean_keyword(keyword);
+                data_filters::handle_if_meaningful(processed_kw.as_str(), collection);
 
                 // Skip, if keyword is invalid
                 if processed_kw == consts::DEFAULT_KEYWORD_INVALID {
@@ -52,24 +52,24 @@ pub fn parse_csv_into_collection(
                 }
                 processed_kw
             }
-            None => data_processor::default(),
+            None => data_filters::default(),
         };
 
         let date_time: String = match query_row.get(consts::CSV_COLUMN_INDEX_DATETIME) {
-            Some(datetime) => data_processor::datetime(datetime),
-            None => data_processor::default(),
+            Some(datetime) => data_filters::datetime(datetime),
+            None => data_filters::default(),
         };
         let source: String = match query_row.get(consts::CSV_COLUMN_INDEX_URL) {
-            Some(source) => data_processor::source_url(source),
-            None => data_processor::default(),
+            Some(source) => data_filters::source_url(source),
+            None => data_filters::default(),
         };
         let hits: i32 = match query_row.get(consts::CSV_COLUMN_INDEX_HITS) {
-            Some(hits) => data_processor::hits(hits),
+            Some(hits) => data_filters::hits(hits),
             None => consts::DEFAULT_MISSING_HITS,
         };
         let target: String = match query_row.get(consts::CSV_COLUMN_INDEX_TARGET) {
-            Some(target) => data_processor::target_url(target),
-            None => data_processor::default(),
+            Some(target) => data_filters::target_url(target),
+            None => data_filters::default(),
         };
 
         let clean_record = records::CleanRecord::new(date_time, keyword, source, hits, target);
