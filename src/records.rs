@@ -1,13 +1,13 @@
 use crate::consts;
 use std::collections::{BTreeMap, HashMap};
 
-// The search's type for statistics
+/// The search's type for statistics
 pub enum StatType {
     DOI,
     InvalidSearch,
 }
 
-// The final collection's type
+/// The final processed collection's type
 pub enum CollectionType {
     Main,
     OrderByCount,
@@ -15,13 +15,18 @@ pub enum CollectionType {
     TopKeywords,
 }
 
-// A cleaned/processed search entry with metadata
+/// A cleaned/processed search entry with metadata
 #[derive(Debug, Clone)]
 pub struct CleanRecord {
+    /// Datetime of the search
     pub date_time: String,
+    /// Keyword searched for
     pub keyword: String,
+    /// The page where the search happened
     pub source: String,
+    /// Number of search results returned
     pub hits: i32,
+    /// Target pages aka click-throughs
     pub target: String,
 }
 
@@ -44,7 +49,7 @@ impl CleanRecord {
 }
 
 /// A collection of cleaned/processed search entries with counter
-/// to store homogenous CleanRecord entries
+/// 'list' is a collection of search entries with metadata
 #[derive(Debug, Clone)]
 pub struct CleanRecordContainer {
     pub counter: u32,
@@ -57,20 +62,21 @@ impl CleanRecordContainer {
     }
 }
 
-// Final collection of clean records organized into sorted maps
+/// Final collection of clean records organized into sorted maps
 #[derive(Debug)]
 pub struct RecordCollection {
-    /// map meaning: [keyword, (count, metadata)]
     // BTrees are inherently ordered by their keys
+    /// map meaning: <keyword, { count, metadata }>
     pub map: BTreeMap<String, CleanRecordContainer>,
 
-    // <count, <target, keyword_meta>>
+    /// map meaning: <count, <target, keyword_meta>>
     pub map_by_counter: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
-    // <count<target, kw_meta>>
+
+    /// map meaning: <count<target, kw_meta>>
     pub map_by_target: BTreeMap<String, Vec<CleanRecord>>,
+
     // <count<source, kw_meta>>
     // pub map_by_source: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>,
-
     pub top_keywords: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>>,
     pub top_targets: BTreeMap<String, Vec<CleanRecord>>,
 
@@ -91,7 +97,6 @@ impl RecordCollection {
             top_keywords: BTreeMap::new(),
             top_targets: BTreeMap::new(),
             stats: HashMap::new(),
-
         }
     }
 
@@ -100,10 +105,13 @@ impl RecordCollection {
         let keyword: String = record.keyword.clone();
 
         if self.map.get(&keyword).is_none() {
-            self.map.insert(keyword, CleanRecordContainer {
-                counter: 1,
-                list: vec![record],
-            });
+            self.map.insert(
+                keyword,
+                CleanRecordContainer {
+                    counter: 1,
+                    list: vec![record],
+                },
+            );
         } else {
             let values = self.map.get_mut(&keyword).unwrap();
             values.counter += 1;
@@ -136,7 +144,8 @@ impl RecordCollection {
             let keyword_meta_list: Vec<CleanRecord> = keyword_meta.list;
 
             if self.map_by_counter.get(&counter).is_none() {
-                let mut keyword_and_meta_holder: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
+                let mut keyword_and_meta_holder: BTreeMap<String, Vec<CleanRecord>> =
+                    BTreeMap::new();
                 keyword_and_meta_holder.insert(the_keyword.clone(), keyword_meta_list);
                 self.map_by_counter.insert(counter, keyword_and_meta_holder);
             } else {
@@ -174,13 +183,16 @@ impl RecordCollection {
                 for target in split_targets {
                     // If target doesn't exist as the "key", create it, otherwise expand collection
                     if target_holder.get(target).is_none() {
-                        target_holder.insert(target.to_string(), vec![CleanRecord {
-                            date_time: record.date_time.clone(),
-                            keyword: record.keyword.clone(),
-                            source: record.source.clone(),
-                            hits: record.hits.clone(),
-                            target: record.target.clone(),
-                        }]);
+                        target_holder.insert(
+                            target.to_string(),
+                            vec![CleanRecord {
+                                date_time: record.date_time.clone(),
+                                keyword: record.keyword.clone(),
+                                source: record.source.clone(),
+                                hits: record.hits.clone(),
+                                target: record.target.clone(),
+                            }],
+                        );
                     } else {
                         // The "key" (aka the target url) exists, expand the vec
                         let search_keywords_for_target = target_holder.get_mut(target).unwrap();
@@ -221,13 +233,19 @@ impl RecordCollection {
             }
         };
 
-
         top_counts
     }
 
     pub fn find_top_keywords(&mut self) {
-        let top_keywords: Vec<_> = self.map_by_counter.iter().rev().take(consts::NUMBER_OF_TOP_KEYWORDS).clone().collect();
-        let mut top_keywords_container: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>> = BTreeMap::new();
+        let top_keywords: Vec<_> = self
+            .map_by_counter
+            .iter()
+            .rev()
+            .take(consts::NUMBER_OF_TOP_KEYWORDS)
+            .clone()
+            .collect();
+        let mut top_keywords_container: BTreeMap<u32, BTreeMap<String, Vec<CleanRecord>>> =
+            BTreeMap::new();
         for item_tuple in top_keywords.iter() {
             top_keywords_container.insert(item_tuple.0.clone(), item_tuple.1.clone());
         }
@@ -236,7 +254,13 @@ impl RecordCollection {
 
     // TODO!
     pub fn find_top_targets(&mut self) {
-        let top_targets: Vec<_> = self.map_by_target.iter().rev().take(consts::NUMBER_OF_TOP_TARGETS).clone().collect();
+        let top_targets: Vec<_> = self
+            .map_by_target
+            .iter()
+            .rev()
+            .take(consts::NUMBER_OF_TOP_TARGETS)
+            .clone()
+            .collect();
         // println!("{:#?}", self.top_targets);
         let mut top_targets_container: BTreeMap<String, Vec<CleanRecord>> = BTreeMap::new();
         for item_tuple in top_targets.iter() {

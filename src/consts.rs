@@ -17,7 +17,8 @@ pub const SPECIAL_KEYWORD_LIST: [&str; 0] = [];
 
 // DEV values
 // pub const CSV_INPUT_FILE_NAME: &str = "import/test.csv";
-pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv";
+// pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv";
+pub const CSV_INPUT_FILE_NAME: &str = "import/eec_q_cop.csv";
 
 pub const CSV_OUTPUT_FILE_NAME: &str = "export/collection.csv";
 

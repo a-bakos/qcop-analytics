@@ -1,22 +1,15 @@
 extern crate csv;
 
-use std::collections::BTreeMap;
+use crate::{consts, data_filters, records, records::CollectionType};
 use csv::{Reader, StringRecord, WriterBuilder};
 use std::error::Error;
-use crate::{
-    consts,
-    data_filters,
-    records,
-    records::CollectionType,
-};
-use crate::records::CleanRecord;
 
 pub fn parse_csv_into_collection(
     file_path: &str,
     collection: &mut records::RecordCollection,
 ) -> Result<(), Box<dyn Error>> {
     let mut reader = Reader::from_path(file_path)?;
-    let mut skipped_items: u32 = 0;
+    let mut number_of_skipped_items: u32 = 0;
 
     println!("Parsing CSV into collection...");
 
@@ -26,7 +19,7 @@ pub fn parse_csv_into_collection(
         // Check if we need to skip logged-in user searches
         if let Some(user) = query_row.get(consts::CSV_COLUMN_INDEX_USER) {
             if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES && !user.is_empty() {
-                skipped_items += 1;
+                number_of_skipped_items += 1;
                 continue;
             }
         };
@@ -37,7 +30,7 @@ pub fn parse_csv_into_collection(
                 // Skip, if length not valid
                 if !data_filters::is_valid_length(keyword) {
                     collection.add_to_stats(records::StatType::InvalidSearch);
-                    skipped_items += 1;
+                    number_of_skipped_items += 1;
                     continue;
                 }
 
@@ -47,7 +40,7 @@ pub fn parse_csv_into_collection(
                 // Skip, if keyword is invalid
                 if processed_kw == consts::DEFAULT_KEYWORD_INVALID {
                     collection.add_to_stats(records::StatType::InvalidSearch);
-                    skipped_items += 1;
+                    number_of_skipped_items += 1;
                     continue;
                 }
                 processed_kw
@@ -77,7 +70,7 @@ pub fn parse_csv_into_collection(
     }
 
     println!("Parsing finished.");
-    println!("Skipped items: {skipped_items:?}");
+    println!("Skipped items: {number_of_skipped_items:?}");
     println!("Collection length: {:?}\n", collection.map.len());
     Ok(())
 }
@@ -118,15 +111,20 @@ pub fn write_to_csv(
         }
         CollectionType::OrderByTarget => {
             let collection = &collection.map_by_target;
-            for (target, target_meta) in collection.iter() {
-                wtr.write_record([target.clone(), target_meta.len().to_string()])?;
+            for (target, keyword_meta) in collection.iter() {
+                wtr.write_record([target.clone(), keyword_meta.len().to_string()])?;
             }
         }
         CollectionType::TopKeywords => {
             let collection = &collection.top_keywords;
-            for (count, keyword_meta) in collection.iter().rev() {
+            let mut iteration = 0;
+            'outer: for (count, keyword_meta) in collection.iter().rev() {
                 for (keyword, _keyword_meta) in keyword_meta.iter() {
+                    if iteration >= consts::NUMBER_OF_TOP_KEYWORDS {
+                        break 'outer;
+                    }
                     wtr.write_record([keyword.clone(), count.clone().to_string()])?;
+                    iteration += 1;
                 }
             }
         }
