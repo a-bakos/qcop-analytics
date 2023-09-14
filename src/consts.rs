@@ -17,8 +17,8 @@ pub const INVALID_KEYWORD_START_LIST: [&str; 6] = ["1/", "1*", "1\\", "1%", "1&"
 pub const SPECIAL_KEYWORD_LIST: [&str; 0] = [];
 
 // DEV values
-pub const CSV_INPUT_FILE_NAME: &str = "import/test.csv";
-// pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv";
+// pub const CSV_INPUT_FILE_NAME: &str = "import/test.csv";
+pub const CSV_INPUT_FILE_NAME: &str = "import/as-wp_q_cop.csv";
 // pub const CSV_INPUT_FILE_NAME: &str = "import/eec_q_cop.csv";
 // pub const CSV_INPUT_FILE_NAME: &str = "import/er-wp_q_cop.csv";
 // pub const CSV_INPUT_FILE_NAME: &str = "import/lr-tandfq_cop.csv";
@@ -158,3 +158,5 @@ pub const TAINTED_TARGETS: [&str; 5] = [
     ".text-center",
     "class=",
 ];
+
+pub const STRIP_FROM_ENTRY: [&str; 2] = ["\"", "\\&quot;"];

@@ -29,8 +29,9 @@ pub fn clean_keyword(keyword: &str) -> String {
     let mut processed_kw = keyword.trim().to_string();
     // Find "+" in kw and replace it with whitespace
     // TODO!
-    processed_kw = processed_kw.replace('+', " ");
     processed_kw = processed_kw.to_lowercase();
+    processed_kw = processed_kw.replace('+', " ");
+    processed_kw = maybe_strip_elements(processed_kw);
 
     if filter_known_invalid(keyword) {
         maybe_store_invalid_keyword(keyword);
@@ -47,6 +48,23 @@ pub fn clean_keyword(keyword: &str) -> String {
         return processed_kw;
     }
 
+    processed_kw
+}
+
+fn maybe_strip_elements(keyword: String) -> String {
+    let mut processed_kw = keyword;
+    if processed_kw.contains("\\&quot;") {
+        processed_kw = processed_kw.replace("\\&quot;", "");
+    }
+    if processed_kw.contains("\"") {
+        processed_kw = processed_kw.replace("\"", "");
+    }
+    /*if processed_kw.starts_with("\\&quot;") {
+        processed_kw = processed_kw.strip_prefix("\\&quot;").unwrap().to_string();
+    }
+    if processed_kw.ends_with("\\&quot;") {
+        processed_kw = processed_kw.strip_suffix("\\&quot;").unwrap().to_string();
+    }*/
     processed_kw
 }
 
