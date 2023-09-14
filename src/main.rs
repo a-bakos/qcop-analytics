@@ -1,7 +1,7 @@
 mod consts;
 mod csv;
-mod intelligence;
 mod data_filters;
+mod intelligence;
 mod records;
 
 use crate::{
@@ -14,12 +14,25 @@ fn main() {
 
     // Configuration parameter notices
     println!("[Config] CSV to parse: {}", consts::CSV_INPUT_FILE_NAME);
-    println!("[Config] Keyword MIN / MAX length: {} / {}", consts::KEYWORD_MIN_LENGTH, consts::KEYWORD_MAX_LENGTH);
+    println!(
+        "[Config] Keyword MIN / MAX length: {} / {}",
+        consts::KEYWORD_MIN_LENGTH,
+        consts::KEYWORD_MAX_LENGTH
+    );
     if consts::EXCLUDE_LOGGED_IN_USER_SEARCHES {
         println!("[Config] Excluding logged in user searches");
     }
-    println!("[Config] Number of top keywords: {}", consts::NUMBER_OF_TOP_KEYWORDS);
-    println!("[Config] Number of top targets: {}", consts::NUMBER_OF_TOP_TARGETS);
+    if consts::EXCLUDE_ONLY_NUMBER_SEARCHES {
+        println!("[Config] Excluding number-only entries");
+    }
+    println!(
+        "[Config] Number of top keywords: {}",
+        consts::NUMBER_OF_TOP_KEYWORDS
+    );
+    println!(
+        "[Config] Number of top targets: {}",
+        consts::NUMBER_OF_TOP_TARGETS
+    );
     println!("\n");
 
     let mut collection: RecordCollection = RecordCollection::new();
@@ -61,5 +74,3 @@ fn main() {
 
     println!("\n[ QCop finished. ]");
 }
-
-

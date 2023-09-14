@@ -97,6 +97,13 @@ pub fn is_valid_length(keyword: &str) -> bool {
     keyword.len() >= consts::KEYWORD_MIN_LENGTH && keyword.len() <= consts::KEYWORD_MAX_LENGTH
 }
 
+pub fn is_numeric_only(keyword: &str) -> bool {
+    match keyword.trim().parse::<f64>() {
+        Ok(_) => true,
+        _ => false,
+    }
+}
+
 // To filter known, invalid keywords
 fn filter_known_invalid(keyword: &str) -> bool {
     for invalid_kw in consts::INVALID_KEYWORD_LIST.into_iter() {

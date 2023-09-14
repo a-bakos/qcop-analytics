@@ -1,8 +1,10 @@
 extern crate csv;
 
+use crate::data_filters::is_numeric_only;
 use crate::{consts, data_filters, records, records::CollectionType};
 use csv::{Reader, StringRecord, WriterBuilder};
 use std::error::Error;
+use std::num::ParseFloatError;
 
 pub fn parse_csv_into_collection(
     file_path: &str,
@@ -32,6 +34,16 @@ pub fn parse_csv_into_collection(
                     collection.add_to_stats(records::StatType::InvalidSearch);
                     number_of_skipped_items += 1;
                     continue;
+                }
+
+                // If keyword only contains digits, skip
+                if consts::EXCLUDE_ONLY_NUMBER_SEARCHES {
+                    if is_numeric_only(&keyword) {
+                        // Number, reject
+                        collection.add_to_stats(records::StatType::InvalidSearch);
+                        number_of_skipped_items += 1;
+                        continue;
+                    }
                 }
 
                 let processed_kw = data_filters::clean_keyword(keyword);
