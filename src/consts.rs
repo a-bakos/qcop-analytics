@@ -59,7 +59,9 @@ pub const STAT_INVALID: &str = "invalid";
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
 /// into the binary at the moment.
-pub const TAINTED_SEARCHES: [&str; 89] = [
+pub const TAINTED_SEARCHES: [&str; 91] = [
+    "&lt;",
+    "&gt;",
     "1.",
     "1#",
     "x_",

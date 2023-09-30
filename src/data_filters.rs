@@ -30,7 +30,6 @@ pub fn clean_keyword(keyword: &str) -> String {
     // Find "+" in kw and replace it with whitespace
     // TODO!
     processed_kw = processed_kw.to_lowercase();
-    processed_kw = processed_kw.replace('+', " ");
     processed_kw = maybe_strip_elements(processed_kw);
 
     if filter_known_invalid(keyword) {
@@ -47,14 +46,35 @@ pub fn clean_keyword(keyword: &str) -> String {
         processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
+    if multi_char_filter(keyword) {
+        processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
+        return processed_kw;
+    }
+    //if filter_nonlatin_chars(keyword) {
+    //    processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
+    //    return processed_kw;
+    //}
 
     processed_kw
 }
 
 fn maybe_strip_elements(keyword: String) -> String {
     let mut processed_kw = keyword;
+
+    processed_kw = processed_kw.replace('+', " ");
+    processed_kw = processed_kw.replace("&amp;", "&");
+
     if processed_kw.contains("\\&quot;") {
         processed_kw = processed_kw.replace("\\&quot;", "");
+    }
+    if processed_kw.contains("\"") {
+        processed_kw = processed_kw.replace("\"", "");
+    }
+    if processed_kw.contains(")") {
+        processed_kw = processed_kw.replace(")", "");
+    }
+    if processed_kw.contains("(") {
+        processed_kw = processed_kw.replace("(", "");
     }
     if processed_kw.contains("\"") {
         processed_kw = processed_kw.replace("\"", "");
@@ -104,6 +124,25 @@ fn multi_word_filter(keyword: &str) -> bool {
         }
         return true;
     }
+    false
+}
+
+fn multi_char_filter(keyword: &str) -> bool {
+    let re = Regex::new(r"(?i)%.*%").unwrap();
+    if re.is_match(keyword) {
+        return true;
+    }
+    false
+}
+
+fn filter_nonlatin_chars(keyword: &str) -> bool {
+    // Unicode property escape:
+    // Exclude every non-Latin character, but allow digits, punctuation, and some other characters
+    let re = Regex::new(r"^[\p{L}0-9 .:;\\/,!?-]*$").unwrap();
+    if re.is_match(keyword) {
+        return true;
+    }
+
     false
 }
 
