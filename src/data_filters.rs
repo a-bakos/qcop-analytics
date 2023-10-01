@@ -27,8 +27,6 @@ pub fn target_url(url: &str) -> String {
 
 pub fn clean_keyword(keyword: &str) -> String {
     let mut processed_kw = keyword.trim().to_string();
-    // Find "+" in kw and replace it with whitespace
-    // TODO!
     processed_kw = processed_kw.to_lowercase();
     processed_kw = maybe_strip_elements(processed_kw);
 
@@ -43,10 +41,12 @@ pub fn clean_keyword(keyword: &str) -> String {
         return processed_kw;
     }
     if multi_word_filter(keyword) {
+        maybe_store_invalid_keyword(keyword);
         processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
     if multi_char_filter(keyword) {
+        maybe_store_invalid_keyword(keyword);
         processed_kw = consts::DEFAULT_KEYWORD_INVALID.to_string();
         return processed_kw;
     }
@@ -55,7 +55,7 @@ pub fn clean_keyword(keyword: &str) -> String {
     //    return processed_kw;
     //}
 
-    processed_kw
+    processed_kw.trim().to_string()
 }
 
 fn maybe_strip_elements(keyword: String) -> String {
@@ -79,6 +79,22 @@ fn maybe_strip_elements(keyword: String) -> String {
     if processed_kw.contains("\"") {
         processed_kw = processed_kw.replace("\"", "");
     }
+    if processed_kw.contains("_") {
+        processed_kw = processed_kw.replace("_", " ");
+    }
+    if processed_kw.contains("‘") {
+        processed_kw = processed_kw.replace("‘", "");
+    }
+    if processed_kw.contains("’") {
+        processed_kw = processed_kw.replace("’", "");
+    }
+    if processed_kw.contains("`") {
+        processed_kw = processed_kw.replace("`", "");
+    }
+    if processed_kw.contains("´") {
+        processed_kw = processed_kw.replace("´", "");
+    }
+
     /*if processed_kw.starts_with("\\&quot;") {
         processed_kw = processed_kw.strip_prefix("\\&quot;").unwrap().to_string();
     }
