@@ -94,6 +94,18 @@ fn maybe_strip_elements(keyword: String) -> String {
     if processed_kw.contains("´") {
         processed_kw = processed_kw.replace("´", "");
     }
+    if processed_kw.contains("•") {
+        processed_kw = processed_kw.replace("•", "");
+    }
+    if processed_kw.contains("“") {
+        processed_kw = processed_kw.replace("“", "");
+    }
+    if processed_kw.contains("”") {
+        processed_kw = processed_kw.replace("”", "");
+    }
+    if processed_kw.contains("„") {
+        processed_kw = processed_kw.replace("„", "");
+    }
 
     /*if processed_kw.starts_with("\\&quot;") {
         processed_kw = processed_kw.strip_prefix("\\&quot;").unwrap().to_string();

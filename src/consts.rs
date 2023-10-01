@@ -4,7 +4,7 @@ pub const KEYWORD_MIN_LENGTH: usize = 3;
 pub const EXCLUDE_LOGGED_IN_USER_SEARCHES: bool = true;
 pub const EXCLUDE_ONLY_NUMBER_SEARCHES: bool = true;
 pub const STORE_INVALID_ITEMS: bool = true;
-pub const NUMBER_OF_TOP_KEYWORDS: usize = 50;
+pub const NUMBER_OF_TOP_KEYWORDS: usize = 200;
 pub const NUMBER_OF_TOP_TARGETS: usize = 10;
 
 /// Invalid KW means when a search happened but the keyword couldn't be
@@ -59,7 +59,7 @@ pub const STAT_INVALID: &str = "invalid";
 /// if present. Keep it lowercase.
 /// This list could come from an external file, but it is intentionally baked
 /// into the binary at the moment.
-pub const TAINTED_SEARCHES: [&str; 91] = [
+pub const TAINTED_SEARCHES: [&str; 101] = [
     "&lt;",
     "&gt;",
     "1.",
@@ -94,6 +94,16 @@ pub const TAINTED_SEARCHES: [&str; 91] = [
     "\\u",
     "2000\\",
     "2000/",
+    "2000&",
+    "2000*",
+    "*/",
+    "&#",
+    ";;",
+    ",,",
+    "..",
+    "ｅ",
+    "ｓ",
+    "\\\\",
     "javascript",
     "http",
     ".doc",
